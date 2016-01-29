@@ -413,6 +413,7 @@ namespace Project_DotNET.Controllers
 
         //
         // GET: /Account/loadList : returns all users
+        [AllowAnonymous]
         public ActionResult loadList()
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
