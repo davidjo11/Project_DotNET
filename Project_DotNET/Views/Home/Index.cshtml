@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Accueil";
+}
+
+<div class="jumbotron">
+    <h1>Projet ASP.NET MVC 5</h1>
+    <p class="lead">Création d'une application de gestion des utilisateurs.</p>
+    @*<p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
+</div>
+      
+<div class="row">
+    <div class="col-md-4">
+        <h2>Création des utilisateurs</h2>
+        <p>
+            En attendant qu'un webservice vienne alimenter automatiquement la base des utilisateurs, il
+            vous est demandé de créer une interface permettant de créer les utilisateurs. Cette interface
+            permettra de saisir les données suivantes:
+            <ul>
+                <li>Nom</li>
+                <li>Prénom</li>
+                <li>Date de naissance</li>
+                <li>Date d'entrée dans l'entreprise</li>
+            </ul>
+            
+        </p>
+        <p><!--<a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Tester &raquo;</a> -->
+            @Html.ActionLink("Tester", "Login", "Account", new { @class = "btn btn-default" })
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Ajout d'un métier</h2>
+        <p>Il sera possible de rajouter un métier à un utilisateur crée. Une page de recherche permettra de 
+        retrouver l'utilisateur voulu en se basant sur son matricule.
+        Les métiers seront affichés ensuite par famille pour permettre une organisation ergonomique.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Tester &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Tester &raquo;</a></p>
+    </div>
+</div>

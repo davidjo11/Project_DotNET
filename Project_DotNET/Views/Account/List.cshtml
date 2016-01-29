@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Lister les utilisateurs";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div style="margin:auto">
+    <table id="list" class="table table-striped table-hover dt-responsive">
+        <thead>
+            <tr>
+                <td>Pseudo</td>
+                <td>FirstName</td>
+                <td>LastName</td>
+                <td>FirstDay</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section css{
+<link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    }
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                "ajax": {
+                    "url": "/Account/loadList",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Pseudo", "autowidth": true },
+                    { "data": "firstName", "autowidth": true },
+                    { "data": "lastName", "autowidth": true },
+                    { "data": "firstDay", "autowidth": true }
+                ]
+            })
+        })
+    </script>
+}
