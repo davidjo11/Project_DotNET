@@ -139,7 +139,11 @@ namespace Project_DotNET.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            var db = new ApplicationDbContext();
+            var vm = new RegisterViewModel();
+            vm.Jobs = new SelectList(db.Jobs.Select(x => new SelectListItem() { Text = x.JobName, Value = x.Id.ToString() }), "Value", "Text");
+            vm.Companies = new SelectList(db.Companies.Select(x => new SelectListItem() { Text = x.CompanyName + ", " + x.city + ", " + x.country, Value = x.Id.ToString() }), "Value", "Text");
+            return View(vm);
         }
 
         //
@@ -151,7 +155,22 @@ namespace Project_DotNET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, birthday = model.birthday, firstName = model.firstName, lastName = model.lastName.ToUpper(), firstDay = model.firstDay, Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName.ToLower()) };
+                var db = new ApplicationDbContext();
+                var CompanyDb = db.Companies;
+                var JobDb = db.Jobs;
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    birthday = model.birthday,
+                    firstName = model.firstName,
+                    lastName = model.lastName.ToUpper(),
+                    firstDay = (DateTime) model.firstDay,
+                    Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName.ToLower()),
+                };
+                var period = new Period { Company = CompanyDb.Find(model.SelectedCompany), debut = model.firstDay, fin = DateTime.Now, JobId = model.SelectedJob, En_Cours = true };
+                user.addPeriod(period);
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -161,7 +180,7 @@ namespace Project_DotNET.Controllers
                     // Envoyer un message électronique avec ce lien
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Confirmez votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a>");
+                    await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Bonjour "+ model.firstName +" "+ model.lastName +", <br />Nous vous remercions de vous être inscrit sur notre magnifique site de gestion d'habilitations, nous vous prions de confirmer votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a><br/>En espérant vous retrouver très vite sur notre site.<br/>Muchas gracias!<br/>");
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -414,11 +433,11 @@ namespace Project_DotNET.Controllers
         //
         // GET: /Account/loadList : returns all users
         [AllowAnonymous]
-        public ActionResult loadList()
+        public ActionResult JsonList()
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.firstDay }).ToList();
+                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Periods.Last().Job.JobName, c.Periods.Last().Company.CompanyName, c.Periods.Last().debut }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Project_DotNET.Models
 {
@@ -79,11 +80,22 @@ namespace Project_DotNET.Models
 
         [Required]
         [DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/RR}")]
         [Display(Name = "Date de naissance")]
         public DateTime birthday { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [Display(Name = "Métier")]
+        public int SelectedJob { get; set; }
+        public IEnumerable<SelectListItem> Jobs { get; set; }
+
+        [Required]
+        [Display(Name = "Entreprise")]
+        public int SelectedCompany { get; set; }
+        public IEnumerable<SelectListItem> Companies { get; set; }
+
+        [Required]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/RR}")]
         [Display(Name = "Date d'entrée dans l'entreprise")]
         public  DateTime firstDay { get; set; }
 
@@ -100,7 +112,7 @@ namespace Project_DotNET.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirmer le mot de passe ")]
-        [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -119,7 +131,7 @@ namespace Project_DotNET.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirmer le mot de passe")]
-        [Compare("Password", ErrorMessage = "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

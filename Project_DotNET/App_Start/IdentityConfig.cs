@@ -11,15 +11,56 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Project_DotNET.Models;
+using SendGrid;
+using System.Net;
+using System.Configuration;
+using System.Net.Mail;
 
 namespace Project_DotNET
 {
+    //Config avec Gmail: http://bitoftech.net/2015/02/03/asp-net-identity-2-accounts-confirmation-password-user-policy-configuration/
+    
+    // Autre lien interessant: http://tech.trailmax.info/2014/09/sending-emails-in-asp-net-identity-using-dependency-injection-sendgrid-and-debugging-it-with-mailtrap-io/
+    
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
             // Indiquez votre service de messagerie ici pour envoyer un e-mail.
-            return Task.FromResult(0);
+            await configSendGridasync(message);
+            //return Task.FromResult(0);
+        }
+
+        private async Task configSendGridasync(IdentityMessage message)
+        {
+            var myMessage = new MailMessage();
+
+            SmtpClient client = new SmtpClient();
+
+            myMessage.To.Add(message.Destination);
+            //myMessage.From = new System.Net.Mail.MailAddress("dav.josias@gmail.com", "David JOSIAS");
+            myMessage.Subject = message.Subject;
+            myMessage.Body = message.Body;
+            //myMessage.Html = message.Body;
+
+
+            /*var credentials = new NetworkCredential(ConfigurationManager.AppSettings["emailService:Account"],
+                                                    ConfigurationManager.AppSettings["emailService:Password"]);
+
+            // Create a Web transport for sending email.
+            var transportWeb = new Web(credentials);
+
+            // Send the email.
+            if (transportWeb != null)
+            {
+                await transportWeb.DeliverAsync(myMessage);
+            }
+            else
+            {
+                //Trace.TraceError("Failed to create Web transport.");
+                await Task.FromResult(0);
+            }*/
+            await client.SendMailAsync(myMessage);
         }
     }
 
@@ -81,8 +122,12 @@ namespace Project_DotNET
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
+                    {
+                        //Code for email confirmation and reset password life time : 1min30s (pour confirmer le mail
+                        TokenLifespan = TimeSpan.FromHours(0.025)
+                    };
             }
             return manager;
         }

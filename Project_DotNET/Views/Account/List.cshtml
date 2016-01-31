@@ -9,9 +9,11 @@
         <thead>
             <tr>
                 <td>Matricule</td>
-                <td>FirstName</td>
-                <td>LastName</td>
-                <td>FirstDay</td>
+                <td>Prénom</td>
+                <td>Nom</td>
+                <td>Métier actuel (dernier)</td>
+                <td>Entreprise</td>
+                <td>Date d'entrée dans l'entreprise</td>
             </tr>
         </thead>
     </table>
@@ -27,7 +29,7 @@
         $(document).ready(function () {
             $('#list').DataTable({
                 "ajax": {
-                    "url": "/Account/loadList",
+                    "url": "/Account/JsonList",
                     "type": "GET",
                     "datatype": "json"
                 },
@@ -35,7 +37,9 @@
                     { "data": "Pseudo", "autowidth": true },
                     { "data": "firstName", "autowidth": true },
                     { "data": "lastName", "autowidth": true },
-                    { "data": "firstDay", "autowidth": true }
+                    { "data": "JobName", "autowidth": true },
+                    { "data": "CompanyName", "autowidth": true },
+                    { "data": "debut", "autowidth": true },
                 ]
             })
         })
