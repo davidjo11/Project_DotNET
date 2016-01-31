@@ -26,6 +26,30 @@ namespace Project_DotNET.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            context.Categories.AddOrUpdate(
+
+                c => c.Id,
+                new Models.Category { Id = 1, CategoryName = "Achats" },
+                new Models.Category { Id = 2, CategoryName = "IT" });
+
+            context.Companies.AddOrUpdate(
+                c => c.Id,
+                new Models.Company { Id = 1, CompanyName = "Capgemini", city = "Lambersart", country = "France" },
+                new Models.Company { Id = 2, CompanyName = "Atos", city = "Lille", country = "France" },
+                new Models.Company { Id = 3, CompanyName = "Capgemini", city = "Paris", country = "France" },
+                new Models.Company { Id = 4, CompanyName = "QuaddraDiffusion", city = "Villeneuve-d'Ascq", country = "France" },
+                new Models.Company { Id = 5, CompanyName = "Unis", city = "Villeneuve-D'Ascq", country = "France" },
+                new Models.Company { Id = 6, CompanyName = "GFI", city = "Lille", country = "France" },
+                new Models.Company { Id = 7, CompanyName = "CGI", city = "Lille", country = "France" }
+                );
+
+            context.Jobs.AddOrUpdate(
+                j => j.Id,
+                new Models.Job { Id = 1, CategoryId = 2, JobName = "Développeur" },
+                new Models.Job { Id = 2, CategoryId = 1, JobName = "Acheteur" }
+                );
+
+            context.SaveChanges();
         }
     }
 }
