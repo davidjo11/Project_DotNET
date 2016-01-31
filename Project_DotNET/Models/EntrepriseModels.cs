@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,45 +11,51 @@ using System.Threading.Tasks;
 
 namespace Project_DotNET.Models
 {
-    public class Entreprise
+    [Validator(typeof(CompanyValidator))]
+    public class Company
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] //Pour que la BDD génère auto. un ID unique.
-        public int id { get; set; }
+        [Column(Order = 2)]
+        public int Id { get; set; }
 
         [Required]
-        public string name { get; set; }
+        public string CompanyName { get; set; }
 
+        [Required]
+        public string country { get; set; }
+
+        [Required]
+        public string city { get; set; }
 
         //Comme l'annotation de base key n'est pas recommandée j'ai utilisé FluentValidation: http://stackoverflow.com/questions/16678625/asp-net-mvc-4-ef5-unique-property-in-model-best-practice
-        public class EntrepriseValidator : AbstractValidator<Entreprise>
+        public class CompanyValidator : AbstractValidator<Company>
         {
-            public EntrepriseValidator()
+            public CompanyValidator()
             {
-                RuleFor(x => x.name).NotEmpty().WithMessage("Le nom d'une entreprise est requis.").Length(0, 100);
-                RuleFor(x => x.name).Must(BeUniqueUrl).WithMessage("Ce nom de cette entreprise existe déjà.");
+                RuleFor(x => x.CompanyName).NotEmpty().WithMessage("Le nom du métier est requis.").Length(2, 100);
+                RuleFor(x => x.country).NotEmpty().WithMessage("Le nom du pays est requis.").Length(2, 100);
+                RuleFor(x => x.city).NotEmpty().WithMessage("Le nom de la ville est requis.").Length(2, 100);
             }
 
-            private bool BeUniqueUrl(string name)
+            private bool BeUniqueName(string name)
             {
-                var _db = new EntrepriseDbContext();
-                if (_db.Entreprises.SingleOrDefault(x => x.name == name) == null) return true;
+                var _db = new ApplicationDbContext();
+                if (_db.Companies.SingleOrDefault(x => x.CompanyName == name) == null) return true;
                 return false;
             }
         }
 
-        public class EntrepriseDbContext : DbContext
-        {
-            public EntrepriseDbContext()
-                : base("DefaultConnection")
-            { }
-
-            public static EntrepriseDbContext create()
-            {
-                return new EntrepriseDbContext();
-            }
-
-            public DbSet<Entreprise> Entreprises { get; set; }
-        }
     }
+    /*public class CompanyDbContext : DbContext
+    {
+        public CompanyDbContext()
+            : base("NewCo")
+        { }
+
+        public static CompanyDbContext create()
+        {
+            return new CompanyDbContext();
+        }
+
+        public DbSet<Company> Companies { get; set; }
+    }*/
 }
