@@ -86,11 +86,13 @@ namespace Project_DotNET.Models
 
         [Required]
         [Display(Name = "Métier")]
+        public int JobId { get; set; }
         public int SelectedJob { get; set; }
         public IEnumerable<SelectListItem> Jobs { get; set; }
 
         [Required]
         [Display(Name = "Entreprise")]
+        public int CompanyId { get; set; }
         public int SelectedCompany { get; set; }
         public IEnumerable<SelectListItem> Companies { get; set; }
 

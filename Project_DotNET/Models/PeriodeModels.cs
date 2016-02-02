@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Attributes;
+using Project_DotNET.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ namespace Project_DotNET.Models
 {
     public class Period
     {
-        public bool En_Cours;
+        public bool En_Cours { get; set; }
 
         public int Id { get; set; }
 
@@ -31,7 +32,7 @@ namespace Project_DotNET.Models
 
         public virtual Company Company { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
 
@@ -81,19 +82,28 @@ namespace Project_DotNET.Models
                 // - soit il n'existe aucune période pour laquelle la date de fin est supérieure à la date de deb. en param.
                 //Périodes qui croisent pas la nouvelle: http://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods
                 Periods = 0;
-                Periods =
+                /*Periods =
                     _db.Periods
                     .Select(x => x)
                     .Where(x => x.User.Id == user.Id && x.fin != null && (x.debut.CompareTo(fin) == 1 && x.fin.CompareTo(debut) == -1)).Count();
-
                 if (p_en_cours != null)
                     Periods++;
+                    */
+                Periods =
+                    _db.Periods
+                    .Select(x => x)
+                    .Where(x => x.User.Id == user.Id && (Tools.InclusiveBetween(debut, x.debut, x.fin) || Tools.InclusiveBetween(fin, x.debut, x.fin) || (Tools.InclusiveBetween(x.debut, debut, fin) || Tools.InclusiveBetween(x.fin, debut, fin)))).Count();
+
                 //Si'il n'y a aucune intersection alors le nb de périodes est au nb de périodes en bases.
-                return (Periods == _db.Periods.Count()) ? true : false;
+                return (Periods == 0) ? true : false;
             }
             
         }
 
+        public bool isEnCours()
+        {
+            return this.En_Cours;
+        }
     }
     /*public class PeriodDbContext : DbContext
     {

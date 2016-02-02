@@ -168,7 +168,7 @@ namespace Project_DotNET.Controllers
                     firstDay = (DateTime) model.firstDay,
                     Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName.ToLower()),
                 };
-                var period = new Period { Company = CompanyDb.Find(model.SelectedCompany), debut = model.firstDay, fin = DateTime.Now, JobId = model.SelectedJob, En_Cours = true };
+                var period = new Period { UserId = user.Id, CompanyId = model.SelectedCompany, debut = model.firstDay, fin = DateTime.Now, JobId = model.SelectedJob, En_Cours = true };
                 user.addPeriod(period);
 
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -437,7 +437,7 @@ namespace Project_DotNET.Controllers
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Periods.Last().Job.JobName, c.Periods.Last().Company.CompanyName, c.Periods.Last().debut }).ToList();
+                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.LastPeriod.Job.JobName, c.LastPeriod.Company.CompanyName, c.LastPeriod.debut }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

@@ -35,14 +35,20 @@ namespace Project_DotNET.Models
         //Matricule
         public string Pseudo { get; set; }
 
-        public virtual ICollection<Period> Periods { get; set; }
+        public int PeriodId { get; set; }
 
-        //Métier actuell 
-        public string Job { get; set; }
+        public virtual Period LastPeriod { get; set; }
+
+        public virtual ICollection<Period> Periods { get; set; }
 
         public bool addPeriod(Period Period)
         {
             var size = this.Periods.Count;
+
+            /*if (this.LastPeriod.isEnCours() && (Period.isEnCours()))//Cas ajout d'une période en cours alors qu'il y en a déjà.
+                return false;
+            if(this.LastPeriod.fin.CompareTo(Period.debut) > -1)//Ajout d'un
+
             this.Periods.Add(Period);
             if(size + 1 == this.Periods.Count)
             {
@@ -55,8 +61,25 @@ namespace Project_DotNET.Models
                 //Actualisation firstDay
                 this.firstDay = this.Periods.Last().debut;
                 return true;
-            }
-            return false;
+            }*/
+            this.Periods.Add(this.LastPeriod);
+            this.Periods.OrderBy(x => x.debut);
+            this.LastPeriod = Periods.Last();
+            return size + 1 == Periods.Count;
+        }
+
+        public bool removeLastPeriod()
+        {
+            if (this.Periods.Count == 0)
+                return false;
+
+            var _db = new ApplicationDbContext().Periods;
+            var size = this.Periods.Count;
+            var removed = this.LastPeriod;
+
+            this.Periods.Remove(removed);
+            this.LastPeriod = this.Periods.Last();
+            return true;
         }
         
 
@@ -97,7 +120,10 @@ namespace Project_DotNET.Models
     {
         public ApplicationDbContext()
             : base("NewCo", throwIfV1Schema: false)
-        {}
+        {
+            //Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseAlways<ApplicationDbContext>()); //Drop database every times
+            Database.Initialize(true);
+        }
 
         public static ApplicationDbContext Create()
         {

@@ -32,13 +32,13 @@
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedJob, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedJob, Model.Jobs, new { @class = "form-control" })
+            @Html.DropDownList("JobId", Model.Jobs, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label"})
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedCompany, Model.Companies, new { @class = "form-control" })
+            @Html.DropDownList("CompanyId", Model.Companies, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
