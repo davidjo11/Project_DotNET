@@ -3,7 +3,7 @@ namespace Project_DotNET.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class NewCo : DbMigration
+    public partial class Testseed : DbMigration
     {
         public override void Up()
         {

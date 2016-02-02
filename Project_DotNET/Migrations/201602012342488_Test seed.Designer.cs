@@ -7,13 +7,13 @@ namespace Project_DotNET.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class En_coursbool : IMigrationMetadata
+    public sealed partial class Testseed : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(En_coursbool));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Testseed));
         
         string IMigrationMetadata.Id
         {
-            get { return "201601312240145_En_cours - bool"; }
+            get { return "201602012342488_Test seed"; }
         }
         
         string IMigrationMetadata.Source
