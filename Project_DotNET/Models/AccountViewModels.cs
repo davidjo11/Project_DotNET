@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Project_DotNET.Models
@@ -86,15 +87,13 @@ namespace Project_DotNET.Models
 
         [Required]
         [Display(Name = "Métier")]
-        public int JobId { get; set; }
         public int SelectedJob { get; set; }
-        public IEnumerable<SelectListItem> Jobs { get; set; }
+        public IEnumerable<Job> Jobs { get; set; }
 
         [Required]
         [Display(Name = "Entreprise")]
-        public int CompanyId { get; set; }
         public int SelectedCompany { get; set; }
-        public IEnumerable<SelectListItem> Companies { get; set; }
+        public IEnumerable<Company> Companies { get; set; }
 
         [Required]
         //[DisplayFormat(DataFormatString = "{0:dd/MM/RR}")]

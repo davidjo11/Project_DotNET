@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Project_DotNET.Models;
+using System.Collections.Generic;
 
 namespace Project_DotNET.Controllers
 {
@@ -140,9 +141,16 @@ namespace Project_DotNET.Controllers
         public ActionResult Register()
         {
             var db = new ApplicationDbContext();
-            var vm = new RegisterViewModel();
-            vm.Jobs = new SelectList(db.Jobs.Select(x => new SelectListItem() { Text = x.JobName, Value = x.Id.ToString() }), "Value", "Text");
-            vm.Companies = new SelectList(db.Companies.Select(x => new SelectListItem() { Text = x.CompanyName + ", " + x.city + ", " + x.country, Value = x.Id.ToString() }), "Value", "Text");
+            var vm = new RegisterViewModel()
+            {
+                Companies = db.Companies.ToList(),
+                Jobs = db.Jobs.ToList(),
+            };
+            /*var jobOptions = db.Jobs.Select(x => new SelectListItem() { Text = x.JobName, Value = x.Id.ToString() });
+            var companyOptions = db.Companies.Select(x => new SelectListItem() { Text = x.CompanyName + ", " + x.city + ", " + x.country, Value = x.Id.ToString() });
+
+            ViewBag.Companies = companyOptions.ToList();
+            ViewBag.Jobs = jobOptions.ToList();*/
             return View(vm);
         }
 
@@ -153,9 +161,9 @@ namespace Project_DotNET.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var db = new ApplicationDbContext();
             if (ModelState.IsValid)
             {
-                var db = new ApplicationDbContext();
                 var CompanyDb = db.Companies;
                 var JobDb = db.Jobs;
                 var user = new ApplicationUser
@@ -188,6 +196,8 @@ namespace Project_DotNET.Controllers
             }
 
             // Si nous sommes arrivés là, un échec s’est produit. Réafficher le formulaire
+            model.Companies = db.Companies.ToList();
+            model.Jobs = db.Jobs.ToList();
             return View(model);
         }
 
