@@ -26,6 +26,14 @@ namespace Project_DotNET.Models
 
         public DateTime firstDay { get; set; }
 
+        public int CompanyId { get; set; }
+
+        public virtual Company Company { get; set; }
+
+        public int JobId { get; set; }
+
+        public virtual Job Job { get; set; }
+
         [Required]
         public string firstName { get; set; }
 
@@ -35,9 +43,9 @@ namespace Project_DotNET.Models
         //Matricule
         public string Pseudo { get; set; }
 
-        public int PeriodId { get; set; }
+        //public int PeriodId { get; set; }
 
-        public virtual Period LastPeriod { get; set; }
+        //public virtual Period LastPeriod { get; set; }
 
         public virtual ICollection<Period> Periods { get; set; }
 
@@ -62,9 +70,8 @@ namespace Project_DotNET.Models
                 this.firstDay = this.Periods.Last().debut;
                 return true;
             }*/
-            this.Periods.Add(this.LastPeriod);
+            this.Periods.Add(Period);
             this.Periods.OrderBy(x => x.debut);
-            this.LastPeriod = Periods.Last();
             return size + 1 == Periods.Count;
         }
 
@@ -75,11 +82,9 @@ namespace Project_DotNET.Models
 
             var _db = new ApplicationDbContext().Periods;
             var size = this.Periods.Count;
-            var removed = this.LastPeriod;
-
-            this.Periods.Remove(removed);
-            this.LastPeriod = this.Periods.Last();
-            return true;
+            var removed = this.Periods.Remove(this.Periods.Last());
+            
+            return this.Periods.Count == size -1;
         }
         
 
@@ -122,7 +127,7 @@ namespace Project_DotNET.Models
             : base("NewCo", throwIfV1Schema: false)
         {
             //Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseAlways<ApplicationDbContext>()); //Drop database every times
-            Database.Initialize(true);
+            //Database.Initialize(true);
         }
 
         public static ApplicationDbContext Create()

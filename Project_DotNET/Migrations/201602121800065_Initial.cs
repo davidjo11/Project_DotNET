@@ -52,17 +52,14 @@ namespace Project_DotNET.Migrations
                         JobId = c.Int(nullable: false),
                         CompanyId = c.Int(nullable: false),
                         UserId = c.String(maxLength: 128),
-                        ApplicationUser_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
                 .ForeignKey("dbo.Jobs", t => t.JobId, cascadeDelete: true)
-                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId)
                 .Index(t => t.JobId)
                 .Index(t => t.CompanyId)
-                .Index(t => t.UserId)
-                .Index(t => t.ApplicationUser_Id);
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -71,10 +68,11 @@ namespace Project_DotNET.Migrations
                         Id = c.String(nullable: false, maxLength: 128),
                         birthday = c.DateTime(nullable: false),
                         firstDay = c.DateTime(nullable: false),
+                        CompanyId = c.Int(nullable: false),
+                        JobId = c.Int(nullable: false),
                         firstName = c.String(nullable: false),
                         lastName = c.String(nullable: false),
                         Pseudo = c.String(),
-                        PeriodId = c.Int(nullable: false),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
@@ -86,12 +84,13 @@ namespace Project_DotNET.Migrations
                         LockoutEnabled = c.Boolean(nullable: false),
                         AccessFailedCount = c.Int(nullable: false),
                         UserName = c.String(nullable: false, maxLength: 256),
-                        LastPeriod_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Periods", t => t.LastPeriod_Id)
-                .Index(t => t.UserName, unique: true, name: "UserNameIndex")
-                .Index(t => t.LastPeriod_Id);
+                .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
+                .ForeignKey("dbo.Jobs", t => t.JobId, cascadeDelete: true)
+                .Index(t => t.CompanyId)
+                .Index(t => t.JobId)
+                .Index(t => t.UserName, unique: true, name: "UserNameIndex");
             
             CreateTable(
                 "dbo.AspNetUserClaims",
@@ -146,11 +145,11 @@ namespace Project_DotNET.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Periods", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Periods", "ApplicationUser_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Periods", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUsers", "LastPeriod_Id", "dbo.Periods");
+            DropForeignKey("dbo.AspNetUsers", "JobId", "dbo.Jobs");
+            DropForeignKey("dbo.AspNetUsers", "CompanyId", "dbo.Companies");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Periods", "JobId", "dbo.Jobs");
             DropForeignKey("dbo.Periods", "CompanyId", "dbo.Companies");
@@ -160,9 +159,9 @@ namespace Project_DotNET.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
-            DropIndex("dbo.AspNetUsers", new[] { "LastPeriod_Id" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.Periods", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.AspNetUsers", new[] { "JobId" });
+            DropIndex("dbo.AspNetUsers", new[] { "CompanyId" });
             DropIndex("dbo.Periods", new[] { "UserId" });
             DropIndex("dbo.Periods", new[] { "CompanyId" });
             DropIndex("dbo.Periods", new[] { "JobId" });

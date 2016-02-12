@@ -173,12 +173,11 @@ namespace Project_DotNET.Controllers
                     birthday = model.birthday,
                     firstName = model.firstName,
                     lastName = model.lastName.ToUpper(),
-                    firstDay = (DateTime) model.firstDay,
                     Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName.ToLower()),
                 };
                 var period = new Period { UserId = user.Id, CompanyId = model.SelectedCompany, debut = model.firstDay, fin = DateTime.Now, JobId = model.SelectedJob, En_Cours = true };
                 user.addPeriod(period);
-
+                db.Periods.Add(period);
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -186,13 +185,15 @@ namespace Project_DotNET.Controllers
                     
                     // Pour plus d'informations sur l'activation de la confirmation du compte et la réinitialisation du mot de passe, consultez http://go.microsoft.com/fwlink/?LinkID=320771
                     // Envoyer un message électronique avec ce lien
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Bonjour "+ model.firstName +" "+ model.lastName +", <br />Nous vous remercions de vous être inscrit sur notre magnifique site de gestion d'habilitations, nous vous prions de confirmer votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a><br/>En espérant vous retrouver très vite sur notre site.<br/>Muchas gracias!<br/>");
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Bonjour "+ model.firstName +" "+ model.lastName +", <br />Nous vous remercions de vous être inscrit sur notre magnifique site de gestion d'habilitations, nous vous prions de confirmer votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a><br/>En espérant vous retrouver très vite sur notre site.<br/>Muchas gracias!<br/>");
 
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
+                db.Periods.Remove(period);
+                db.SaveChanges();
             }
 
             // Si nous sommes arrivés là, un échec s’est produit. Réafficher le formulaire
@@ -447,7 +448,7 @@ namespace Project_DotNET.Controllers
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.LastPeriod.Job.JobName, c.LastPeriod.Company.CompanyName, c.LastPeriod.debut }).ToList();
+                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Company.CompanyName,  c.firstDay }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

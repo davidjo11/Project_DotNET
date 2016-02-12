@@ -24,11 +24,11 @@ namespace Project_DotNET
     
     public class EmailService : IIdentityMessageService
     {
-        public async Task SendAsync(IdentityMessage message)
+        public Task SendAsync(IdentityMessage message)
         {
             // Indiquez votre service de messagerie ici pour envoyer un e-mail.
-            await configSendGridasync(message);
-            //return Task.FromResult(0);
+            //await configSendGridasync(message); //Passer en "public async"
+            return Task.FromResult(0);
         }
 
         private async Task configSendGridasync(IdentityMessage message)
@@ -126,7 +126,7 @@ namespace Project_DotNET
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
                     {
                         //Code for email confirmation and reset password life time : 1min30s (pour confirmer le mail
-                        TokenLifespan = TimeSpan.FromHours(0.025)
+                        //TokenLifespan = TimeSpan.FromHours(0.025)
                     };
             }
             return manager;

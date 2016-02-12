@@ -96,6 +96,7 @@ namespace Project_DotNET.Models
         public IEnumerable<Company> Companies { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         //[DisplayFormat(DataFormatString = "{0:dd/MM/RR}")]
         [Display(Name = "Date d'entrée dans l'entreprise")]
         public  DateTime firstDay { get; set; }

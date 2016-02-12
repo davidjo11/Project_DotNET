@@ -13,7 +13,7 @@ namespace Project_DotNET.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201602012317302_Initial"; }
+            get { return "201602121800065_Initial"; }
         }
         
         string IMigrationMetadata.Source

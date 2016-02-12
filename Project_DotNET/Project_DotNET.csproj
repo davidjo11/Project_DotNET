@@ -38,12 +38,9 @@
       <Objects>
         <ObjectGroup Name="NewCo" Order="1" xmlns="">
           <Destination Path="" />
-        </ObjectGroup>
-        <ObjectGroup Name="DefaultConnection-Déploiement" Order="2" Enabled="False" xmlns="">
-          <Destination Path="" />
-          <Object Type="DbFullSql">
-            <PreSource Path="Data Source=%28LocalDB%29\MSSQLLocalDB%3bAttachDbFilename=C:\Users\David\Documents\NewCo.mdf%3bIntegrated Security=True%3bConnect Timeout=30" ScriptSchema="True" ScriptData="True" CopyAllFullTextCatalogs="False" DriDefaults="True" />
-            <Source Path="obj\Debug\AutoScripts\DefaultConnection-Déploiement_SchemaAndData.sql" Transacted="True" />
+          <Object Type="DbFullSql" Enabled="True">
+            <PreSource Path="" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\NewCo_SchemaOnly.sql" Transacted="True" />
           </Object>
         </ObjectGroup>
       </Objects>
@@ -220,21 +217,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201602012317302_Initial.cs" />
-    <Compile Include="Migrations\201602012317302_Initial.Designer.cs">
-      <DependentUpon>201602012317302_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201602012322555_Initial1.cs" />
-    <Compile Include="Migrations\201602012322555_Initial1.Designer.cs">
-      <DependentUpon>201602012322555_Initial1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201602012342488_Test seed.cs" />
-    <Compile Include="Migrations\201602012342488_Test seed.Designer.cs">
-      <DependentUpon>201602012342488_Test seed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201602020007315_Test.cs" />
-    <Compile Include="Migrations\201602020007315_Test.Designer.cs">
-      <DependentUpon>201602020007315_Test.cs</DependentUpon>
+    <Compile Include="Migrations\201602121800065_Initial.cs" />
+    <Compile Include="Migrations\201602121800065_Initial.Designer.cs">
+      <DependentUpon>201602121800065_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -323,17 +308,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602012317302_Initial.resx">
-      <DependentUpon>201602012317302_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201602012322555_Initial1.resx">
-      <DependentUpon>201602012322555_Initial1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201602012342488_Test seed.resx">
-      <DependentUpon>201602012342488_Test seed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201602020007315_Test.resx">
-      <DependentUpon>201602020007315_Test.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602121800065_Initial.resx">
+      <DependentUpon>201602121800065_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

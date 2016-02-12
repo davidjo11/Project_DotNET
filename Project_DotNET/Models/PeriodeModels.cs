@@ -61,21 +61,8 @@ namespace Project_DotNET.Models
                 var _db = new ApplicationDbContext();
                 var Periods = 0;
 
-                //Période en cours (il y en a 0 ou 1 max.)
-                var p_en_cours = _db.Periods.Single(x => x.En_Cours );
-                if (en_cours && p_en_cours != null)
-                    //Si il existe déjà une période en cours
+                if (debut.CompareTo(user.firstDay) >= 0 || fin.CompareTo(user.firstDay) >= 0)
                     return false;
-                else if(en_cours && p_en_cours == null)
-                {
-                    //S'il n'y a pas de périodes en cours alors si on trouve une période dont la date de fin est supérieure
-                    //ou égale à debut (param.) alors intersection 
-                    Periods =
-                        _db.Periods
-                        .Select(x => x)
-                        .Where(x => x.User.Id == user.Id && x.fin.CompareTo(debut) >= 0).Count();
-                    return Periods == 0 ? true : false;
-                }
 
                 //La période est correcte pour 2 cas:
                 // - soit il n'existe aucune période pour laquelle la date de début est inférieure à la date de fin en param.
