@@ -1,6 +1,6 @@
 README.MD
 
-Tings to do when you clone or pull the repo:
+Things to do when you clone or pull the repo:
 
 Create local database:
 - Double-click on properties, in "Package/Publication SQL" activate the page, create a connection called NewCo and check the box right under "informations about the source database" (Infos sur la bdd source).
