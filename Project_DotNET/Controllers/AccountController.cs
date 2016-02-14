@@ -173,11 +173,11 @@ namespace Project_DotNET.Controllers
                     birthday = model.birthday,
                     firstName = model.firstName,
                     lastName = model.lastName.ToUpper(),
-                    Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName.ToLower()),
+                    Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName).ToLower(),
+                    CompanyId = model.SelectedCompany,
+                    JobId = model.SelectedJob
                 };
-                var period = new Period { UserId = user.Id, CompanyId = model.SelectedCompany, debut = model.firstDay, fin = DateTime.Now, JobId = model.SelectedJob, En_Cours = true };
-                user.addPeriod(period);
-                db.Periods.Add(period);
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -192,8 +192,6 @@ namespace Project_DotNET.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
-                db.Periods.Remove(period);
-                db.SaveChanges();
             }
 
             // Si nous sommes arrivés là, un échec s’est produit. Réafficher le formulaire

@@ -1,0 +1,41 @@
+﻿@model Project_DotNET.Models.CreateJobViewModel
+@{
+    ViewBag.Title = "Ajouter un métier à un utilisateur";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("CreateJob", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Créer un métier.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedCategory, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedCategory, new SelectList(Model.Categories.Select(j => new SelectListItem() { Text = j.CategoryId.ToString(), Value = j.CategoryName }), "Text", "Value", Model.Categories.First().CategoryId), "Sélectionnez la catégorie correspondante", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+        </div>
+    </div>
+    
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+

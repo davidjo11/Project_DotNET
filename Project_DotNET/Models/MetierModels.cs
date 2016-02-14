@@ -14,8 +14,8 @@ namespace Project_DotNET.Models
     [Validator(typeof(JobValidator))]
     public class Job
     {
-        [Column(Order = 3)]
-        public int Id { get; set; }
+        //[Column(Order = 3)]
+        public int JobId { get; set; }
 
         [Required]
         public string JobName { get; set; }

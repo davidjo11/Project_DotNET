@@ -11,22 +11,22 @@ namespace Project_DotNET.Migrations
                 "dbo.Categories",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        CategoryId = c.Int(nullable: false, identity: true),
                         CategoryName = c.String(nullable: false),
                         CategoryDesc = c.String(),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.CategoryId);
             
             CreateTable(
                 "dbo.Jobs",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        JobId = c.Int(nullable: false, identity: true),
                         JobName = c.String(nullable: false),
                         JobDesc = c.String(),
                         CategoryId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id)
+                .PrimaryKey(t => t.JobId)
                 .ForeignKey("dbo.Categories", t => t.CategoryId, cascadeDelete: true)
                 .Index(t => t.CategoryId);
             
@@ -34,26 +34,26 @@ namespace Project_DotNET.Migrations
                 "dbo.Companies",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        CompanyId = c.Int(nullable: false, identity: true),
                         CompanyName = c.String(nullable: false),
                         country = c.String(nullable: false),
                         city = c.String(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.CompanyId);
             
             CreateTable(
                 "dbo.Periods",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        PeriodId = c.Int(nullable: false, identity: true),
                         En_Cours = c.Boolean(nullable: false),
-                        debut = c.DateTime(nullable: false),
-                        fin = c.DateTime(nullable: false),
+                        debut = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
+                        fin = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         JobId = c.Int(nullable: false),
                         CompanyId = c.Int(nullable: false),
                         UserId = c.String(maxLength: 128),
                     })
-                .PrimaryKey(t => t.Id)
+                .PrimaryKey(t => t.PeriodId)
                 .ForeignKey("dbo.Companies", t => t.CompanyId, cascadeDelete: true)
                 .ForeignKey("dbo.Jobs", t => t.JobId, cascadeDelete: true)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId)
@@ -66,8 +66,8 @@ namespace Project_DotNET.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        birthday = c.DateTime(nullable: false),
-                        firstDay = c.DateTime(nullable: false),
+                        birthday = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
+                        firstDay = c.DateTime(nullable: false, precision: 7, storeType: "datetime2"),
                         CompanyId = c.Int(nullable: false),
                         JobId = c.Int(nullable: false),
                         firstName = c.String(nullable: false),

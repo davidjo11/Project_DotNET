@@ -320,6 +320,54 @@ namespace Project_DotNET.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
+        [AllowAnonymous]
+        // GET: /Manage/CreateJob
+        public ActionResult CreateJob()
+        {
+            var db = new ApplicationDbContext();
+            var vm = new CreateJobViewModel()
+            {
+                Categories = db.Categories.ToList(),
+            };
+            return View(vm);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        // POST: /Manage/CreateJob
+        public ActionResult CreateJob(CreateJobViewModel model)
+        {
+            //Traitement
+
+            //Redirection vers la liste des métiers
+            return View();
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/AddJobToUser (creates a period)
+        public ActionResult AddJobToUser()
+        {
+            var db = new ApplicationDbContext();
+            var vm = new AddJobToUserViewModel()
+            {
+                Jobs = db.Jobs.ToList(),
+                Users = db.Users.ToList(),
+                Companies = db.Companies.ToList(),
+            };
+            return View(vm);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        // POST: /Manage/CreateJob
+        public ActionResult AddJobToUserViewModel(AddJobToUserViewModel model)
+        {
+            //Traitement
+
+            //Redirection vers la liste des périodes pour l'utilisateur concerné
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

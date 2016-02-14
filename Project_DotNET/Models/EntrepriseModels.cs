@@ -14,8 +14,8 @@ namespace Project_DotNET.Models
     [Validator(typeof(CompanyValidator))]
     public class Company
     {
-        [Column(Order = 2)]
-        public int Id { get; set; }
+        //[Column(Order = 2)]
+        public int CompanyId { get; set; }
 
         [Required]
         public string CompanyName { get; set; }

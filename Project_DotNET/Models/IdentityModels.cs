@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
@@ -22,8 +23,10 @@ namespace Project_DotNET.Models
         }
 
         [Required]
+        [Column(TypeName = "DateTime2")]
         public DateTime birthday { get; set; }
 
+        [Column(TypeName = "DateTime2")]
         public DateTime firstDay { get; set; }
 
         public int CompanyId { get; set; }
@@ -93,8 +96,8 @@ namespace Project_DotNET.Models
         {
             public UserValidator()
             {
-                RuleFor(x => x.firstName).NotEmpty().WithMessage("Le prénom est requis (2-100 lettres).").Length(2, 100);
-                RuleFor(x => x.lastName).NotEmpty().WithMessage("Le nom est requis (2-100 lettres)..").Length(2, 100);
+                RuleFor(x => x.firstName).NotEmpty().WithMessage("Le prénom est requis (2-10 lettres).").Length(2, 10);
+                RuleFor(x => x.lastName).NotEmpty().WithMessage("Le nom est requis (2-10 lettres).").Length(2, 10);
                 //Age adulte requis
                 RuleFor(x => DateTime.Now.Year - x.birthday.Year).GreaterThanOrEqualTo(18).WithMessage("Petit, tu dois avoir plus de 18 ans pour pouvoir travailler.");
                 RuleFor(x => x).Must(x => { return correctDates(x.birthday, x.firstDay); }).WithMessage("La date d'entrée dans l'entreprise doit être strictement supérieure à la date de naissance.");

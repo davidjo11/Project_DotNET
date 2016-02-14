@@ -18,7 +18,7 @@ namespace Project_DotNET.Models
         {
             this.Jobs = new List<Job>();
         }
-        public int Id { get; set; }
+        public int CategoryId { get; set; }
 
         [Required]
         public string CategoryName { get; set; }

@@ -16,12 +16,14 @@ namespace Project_DotNET.Models
     {
         public bool En_Cours { get; set; }
 
-        public int Id { get; set; }
+        public int PeriodId { get; set; }
 
         [Required]
+        [Column(TypeName = "DateTime2")]
         public DateTime debut { get; set; }
 
         //Nullable car passée ou en cours
+        [Column(TypeName = "DateTime2")]
         public DateTime fin { get; set; }
 
         public int JobId { get; set; }

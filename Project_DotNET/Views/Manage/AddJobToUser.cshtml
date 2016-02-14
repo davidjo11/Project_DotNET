@@ -1,0 +1,59 @@
+﻿@model Project_DotNET.Models.AddJobToUserViewModel
+@{
+    ViewBag.Title = "Ajouter un métier à un utilisateur";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("AddJobToUser", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Ajouter un métier à un utilisateur.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedUser, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedUser, new SelectList(Model.Users.Select(j => new SelectListItem() { Text = j.Id.ToString(), Value = j.Pseudo }), "Text", "Value", Model.Users.First().Id), "Sélectionnez l'utilisateur", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedJob, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedJob, new SelectList(Model.Jobs.Select(j => new SelectListItem() { Text = j.JobId.ToString(), Value = j.JobName }), "Text", "Value", Model.Jobs.First().JobId), "Sélectionnez le métier", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Debut, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Debut, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18) })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Fin, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Fin, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18) })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(j => new SelectListItem() { Text = j.CompanyId.ToString(), Value = j.CompanyName +", "+j.CompanyName+", " + j.country }), "Text", "Value", Model.Companies.First().CompanyId), "Sélectionnez l'entreprise", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="S’inscrire" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+

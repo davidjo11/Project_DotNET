@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using System;
 
 namespace Project_DotNET.Models
 {
@@ -82,5 +83,46 @@ namespace Project_DotNET.Models
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+    }
+
+    public class CreateJobViewModel
+    {
+        [Required]
+        [Display(Name = "Nom du métier")]
+        public string Name { get; set; }
+
+        [Display(Name = "Description du métier")]
+        public string Description { get; set; }
+
+        [Required]
+        [Display(Name = "Catégorie du métier")]
+        public int SelectedCategory { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+    }
+
+    public class AddJobToUserViewModel
+    {
+        [Required]
+        [Display(Name = "Utilisateur")]
+        public int SelectedUser { get; set; }
+        public IEnumerable<ApplicationUser> Users { get; set; }
+
+        [Required]
+        [Display(Name = "Métier exercé")]
+        public int SelectedJob { get; set; }
+        public IEnumerable<Job> Jobs { get; set; }
+
+        [Required]
+        [Display(Name = "Début")]
+        public DateTime Debut { get; set; }
+
+        [Required]
+        [Display(Name = "Fin")]
+        public DateTime Fin { get; set; }
+
+        [Required]
+        [Display(Name = "Entreprise")]
+        public int SelectedCompany { get; set; }
+        public IEnumerable<Company> Companies { get; set; }
     }
 }

@@ -32,13 +32,13 @@
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedJob, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-             @Html.DropDownListFor(m => m.SelectedJob, new SelectList(Model.Jobs.Select(j => new SelectListItem() { Text = j.Id.ToString(), Value = j.JobName }), "Text", "Value", Model.Jobs.First().Id), "Selectionnez votre métier", new { @class = "form-control" })
+             @Html.DropDownListFor(m => m.SelectedJob, new SelectList(Model.Jobs.Select(j => new SelectListItem() { Text = j.JobId.ToString(), Value = j.JobName }), "Text", "Value", Model.Jobs.First().JobId), "Selectionnez votre métier", new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label"})
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(c => new SelectListItem() { Text = c.Id.ToString(), Value = c.CompanyName }), "Text", "Value",Model.Companies.First().Id), "Selectionnez votre entreprise", new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(c => new SelectListItem() { Text = c.CompanyId.ToString(), Value = c.CompanyName + ", " + c.city + ", " + c.country}), "Text", "Value",Model.Companies.First().CompanyId), "Selectionnez votre entreprise", new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
