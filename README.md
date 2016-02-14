@@ -1,5 +1,17 @@
 README.MD
 
+Tings to do when you clone or pull the repo:
+
+Create local database:
+- Double-click on properties, in "Package/Publication SQL" activate the page, create a connection called NewCo and check the box right under "informations about the source database" (Infos sur la bdd source).
+- go in the NuGet console and do Upddate-Database then enter (that's it the database should be set).
+
+Package to install beforehand, do in console package NuGet:
+- Install-Package FluentValidation.MVC5 -Version 6.1.0 
+- Install-Package jQuery.Validation
+
+
+
 Notes:
 
 Download sqlloaderdb.msi for local databases management, here https://www.microsoft.com/fr-FR/download/details.aspx?id=29062 .
