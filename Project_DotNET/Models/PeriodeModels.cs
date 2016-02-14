@@ -18,7 +18,6 @@ namespace Project_DotNET.Models
 
         public int PeriodId { get; set; }
 
-        [Required]
         [Column(TypeName = "DateTime2")]
         public DateTime debut { get; set; }
 
@@ -40,7 +39,7 @@ namespace Project_DotNET.Models
 
 
         //Comme l'annotation de base key n'est pas recommandée j'ai utilisé FluentValidation: http://stackoverflow.com/questions/16678625/asp-net-mvc-4-ef5-unique-property-in-model-best-practice
-        public class PeriodValidator : AbstractValidator<Period>
+        /*public class PeriodValidator : AbstractValidator<Period>
         {
             public PeriodValidator()
             {
@@ -77,7 +76,7 @@ namespace Project_DotNET.Models
                     .Where(x => x.User.Id == user.Id && x.fin != null && (x.debut.CompareTo(fin) == 1 && x.fin.CompareTo(debut) == -1)).Count();
                 if (p_en_cours != null)
                     Periods++;
-                    */
+                    
                 Periods =
                     _db.Periods
                     .Select(x => x)
@@ -87,7 +86,7 @@ namespace Project_DotNET.Models
                 return (Periods == 0) ? true : false;
             }
             
-        }
+        }*/
 
         public bool isEnCours()
         {

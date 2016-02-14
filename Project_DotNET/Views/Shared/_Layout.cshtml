@@ -26,16 +26,29 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        Actions
+                        <a href="/Account/List" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Utilisateurs
                         <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Lister les contacts", "List", "Account")</li>
-                            <li>@Html.ActionLink("Ajouter un métier", "CreateJob", "Manage")</li>
+                            <li>@Html.ActionLink("Ajouter un métier à un utilisateur", "AddJobToUser", "Manage")</li>
                         </ul>
                     </li>
-                    <li>@Html.ActionLink("Métiers", "Index", "Home")</li>
+                    <li class="dropdown">
+                        <a href="/Manage/ListJobs" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Métiers
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Lister les métiers", "ListJobs", "Manage")</li>
+                            <li>@Html.ActionLink("Créer un métier", "CreateJob", "Manage")</li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">Catégories</li>
+                            <li>@Html.ActionLink("Créer une catégorie", "CreateCategory", "Manage")</li>
+                            <li>@Html.ActionLink("Liste des catégories","ListCategories","Manage")</li>
+                        </ul>
+                    </li>
                     <li>@Html.ActionLink("À propos de", "About", "Home")</li>
                     @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                 </ul>

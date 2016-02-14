@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Liste des métiers";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div style="margin:auto">
+    <table id="list" class="table table-striped table-hover dt-responsive">
+        <thead>
+            <tr>
+                <td>Métier</td>
+                <td>Catégorie</td>
+                <td>Description du métier</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section css{
+    <link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                "ajax": {
+                    "url": "/Manage/JsonListJobs",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "JobName", "autowidth": true },
+                    { "data": "CategoryName", "autowidth": true },
+                    { "data": "CategoryDesc", "autowidth" : true},
+                ]
+            })
+        })
+    </script>
+}

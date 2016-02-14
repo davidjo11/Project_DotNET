@@ -22,7 +22,6 @@ namespace Project_DotNET.Models
             this.Periods = new List <Period>();
         }
 
-        [Required]
         [Column(TypeName = "DateTime2")]
         public DateTime birthday { get; set; }
 
@@ -37,10 +36,8 @@ namespace Project_DotNET.Models
 
         public virtual Job Job { get; set; }
 
-        [Required]
         public string firstName { get; set; }
 
-        [Required]
         public string lastName { get; set; }
 
         //Matricule
@@ -101,7 +98,7 @@ namespace Project_DotNET.Models
                 //Age adulte requis
                 RuleFor(x => DateTime.Now.Year - x.birthday.Year).GreaterThanOrEqualTo(18).WithMessage("Petit, tu dois avoir plus de 18 ans pour pouvoir travailler.");
                 RuleFor(x => x).Must(x => { return correctDates(x.birthday, x.firstDay); }).WithMessage("La date d'entrée dans l'entreprise doit être strictement supérieure à la date de naissance.");
-                RuleForEach(x => x.Periods).SetValidator(new Period.PeriodValidator());
+                //RuleForEach(x => x.Periods).SetValidator(new Period.PeriodValidator());
             }
             
             private bool correctDates(DateTime birthday, DateTime firstDay)

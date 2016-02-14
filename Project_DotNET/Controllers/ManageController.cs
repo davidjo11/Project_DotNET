@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Project_DotNET.Models;
+using FluentValidation.Results;
+using Project_DotNET.Utils;
 
 namespace Project_DotNET.Controllers
 {
@@ -322,6 +324,64 @@ namespace Project_DotNET.Controllers
 
         [AllowAnonymous]
         // GET: /Manage/CreateJob
+        public ActionResult CreateCategory()
+        {
+            var db = new ApplicationDbContext();
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // POST: /Manage/CreateJob
+        public ActionResult CreateCategory(CreateCategoryViewModel model)
+        {
+            CreateCategoryVMValidator validator = new CreateCategoryVMValidator();
+            ValidationResult result = validator.Validate(model);
+
+            //Traitement
+            var db = new ApplicationDbContext();
+            if (result.IsValid)
+            {
+                var CategoryDb = db.Categories;
+
+                var newCat = new Category { CategoryName = model.Name, CategoryDesc = model.Description };
+                //Ajout à la bdd
+                CategoryDb.Add(newCat);
+                //Commit!
+                db.SaveChanges();
+
+                return RedirectToAction("ListCategories", "Manage");
+            }
+
+            foreach (ValidationFailure failer in result.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
+            //Redirection vers la liste des périodes pour l'utilisateur concerné
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/ListCategories
+        public ActionResult ListCategories()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/JsonListCategories
+        public ActionResult JsonListCategories()
+        {
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var data = db.Categories.Select(c => new { c.CategoryName, c.CategoryDesc }).ToList();
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/CreateJob
         public ActionResult CreateJob()
         {
             var db = new ApplicationDbContext();
@@ -334,13 +394,53 @@ namespace Project_DotNET.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         // POST: /Manage/CreateJob
         public ActionResult CreateJob(CreateJobViewModel model)
         {
-            //Traitement
+            CreateJobVMValidator validator = new CreateJobVMValidator();
+            ValidationResult result = validator.Validate(model);
 
-            //Redirection vers la liste des métiers
+            //Traitement
+            var db = new ApplicationDbContext();
+            if (result.IsValid)
+            {
+                var JobDb = db.Jobs;
+
+                var newJob = new Job { JobName = model.Name, JobDesc = model.Description, CategoryId = model.SelectedCategory };
+                //Ajout à la bdd
+                JobDb.Add(newJob);
+                //Commit!
+                db.SaveChanges();
+
+                return RedirectToAction("ListJobs", "Manage");
+            }
+
+            foreach (ValidationFailure failer in result.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
+            //Redirection vers la liste des périodes pour l'utilisateur concerné
+            model.Categories = db.Categories.ToList();
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/ListJobs
+        public ActionResult ListJobs()
+        {
             return View();
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/JsonListJobs
+        public ActionResult JsonListJobs()
+        {
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var data = db.Jobs.Select(j => new { j.JobName, j.Category.CategoryName, j.JobDesc }).ToList();
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [AllowAnonymous]
@@ -359,13 +459,36 @@ namespace Project_DotNET.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         // POST: /Manage/CreateJob
-        public ActionResult AddJobToUserViewModel(AddJobToUserViewModel model)
+        public ActionResult AddJobToUser(AddJobToUserViewModel model)
         {
-            //Traitement
+            AddJobToUserVMValidator validator = new AddJobToUserVMValidator();
+            ValidationResult result = validator.Validate(model);
 
+            //Traitement
+            var db = new ApplicationDbContext();
+            if (result.IsValid)
+            {
+                var PeriodsDb = db.Periods;
+
+                var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser };
+
+                PeriodsDb.Add(period);
+                db.SaveChanges();
+
+                return RedirectToAction("List", "Account");
+            }
+
+            foreach (ValidationFailure failer in result.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
             //Redirection vers la liste des périodes pour l'utilisateur concerné
-            return View();
+            model.Jobs = db.Jobs.ToList();
+            model.Users = db.Users.ToList();
+            model.Companies = db.Companies.ToList();
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)

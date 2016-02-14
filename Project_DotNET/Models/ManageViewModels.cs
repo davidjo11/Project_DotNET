@@ -3,6 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System;
+using FluentValidation.Attributes;
+using FluentValidation;
+using System.Linq;
+using Project_DotNET.Utils;
 
 namespace Project_DotNET.Models
 {
@@ -102,27 +106,33 @@ namespace Project_DotNET.Models
 
     public class AddJobToUserViewModel
     {
-        [Required]
         [Display(Name = "Utilisateur")]
-        public int SelectedUser { get; set; }
+        public string SelectedUser { get; set; }
         public IEnumerable<ApplicationUser> Users { get; set; }
-
-        [Required]
+        
         [Display(Name = "Métier exercé")]
         public int SelectedJob { get; set; }
         public IEnumerable<Job> Jobs { get; set; }
-
-        [Required]
+        
+        [DataType(DataType.Date)]
         [Display(Name = "Début")]
         public DateTime Debut { get; set; }
-
-        [Required]
+        
+        [DataType(DataType.Date)]
         [Display(Name = "Fin")]
         public DateTime Fin { get; set; }
 
-        [Required]
         [Display(Name = "Entreprise")]
         public int SelectedCompany { get; set; }
         public IEnumerable<Company> Companies { get; set; }
+    }
+
+    public class CreateCategoryViewModel
+    {
+        [Display(Name = "Nom de la catégorie")]
+        public string Name { get; set; }
+
+        [Display(Name = "Description")]
+        public string Description { get; set; }
     }
 }
