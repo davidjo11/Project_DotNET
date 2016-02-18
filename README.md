@@ -11,7 +11,6 @@ Package to install beforehand, do in console package NuGet:
 - Install-Package jQuery.Validation
 
 
-
 Notes:
 
 Download sqlloaderdb.msi for local databases management, here https://www.microsoft.com/fr-FR/download/details.aspx?id=29062 .
@@ -43,3 +42,49 @@ Very interesting websites about everything:
 - This one was helpful for the database initialization configuration: http://patrickdesjardins.com/blog/entity-framework-database-initialization
 - About the email settings: you need http://stackoverflow.com/questions/29774401/how-to-send-email-from-the-c-sharp-program
 - Issues with DropDownList in view: http://odetocode.com/Blogs/scott/archive/2010/01/18/drop-down-lists-and-asp-net-mvc.aspx
+
+
+
+##How to drop/create/populate database
+
+Warning, all data not present in the seed method will be lost.
+
+* delete database in SQL explorer with close connection selected
+
+	add-migration InitialCreate
+	
+* Insert the here under 
+
+	update-database
+
+
+##To be inserted in seed method of migration/configuration.cs after the comments.
+
+
+Database insert data
+
+
+context.Categories.AddOrUpdate(
+
+                c => c.CategoryId,
+                new Models.Category { CategoryId = 1, CategoryName = "Achats" },
+                new Models.Category { CategoryId = 2, CategoryName = "IT" });
+
+            context.Companies.AddOrUpdate(
+                c => c.CompanyId,
+                new Models.Company { CompanyId = 1, CompanyName = "Capgemini", city = "Lambersart", country = "France" },
+                new Models.Company { CompanyId = 2, CompanyName = "Atos", city = "Lille", country = "France" },
+                new Models.Company { CompanyId = 3, CompanyName = "Capgemini", city = "Paris", country = "France" },
+                new Models.Company { CompanyId = 4, CompanyName = "QuaddraDiffusion", city = "Villeneuve-d'Ascq", country = "France" },
+                new Models.Company { CompanyId = 5, CompanyName = "Unis", city = "Villeneuve-D'Ascq", country = "France" },
+                new Models.Company { CompanyId = 6, CompanyName = "GFI", city = "Lille", country = "France" },
+                new Models.Company { CompanyId = 7, CompanyName = "CGI", city = "Lille", country = "France" }
+                );
+
+            context.Jobs.AddOrUpdate(
+                j => j.JobId,
+                new Models.Job { JobId = 1, CategoryId = 2, JobName = "Développeur" },
+                new Models.Job { JobId = 2, CategoryId = 1, JobName = "Acheteur" }
+                );
+
+            context.SaveChanges();
