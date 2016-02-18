@@ -40,6 +40,10 @@ namespace Project_DotNET.Models
 
         public string lastName { get; set; }
 
+        public int RoleId { get; set; }
+
+        public virtual CustomRole Role { get; set; }
+
         //Matricule
         public string Pseudo { get; set; }
 
@@ -142,5 +146,9 @@ namespace Project_DotNET.Models
         public DbSet<Company> Companies { get; set; }
 
         public DbSet<Job> Jobs { get; set; }
+
+        public DbSet<CustomRole> CustomRoles { get; set; }
+
+        public DbSet<RolesInc> RolesInc { get; set; }
     }
 }

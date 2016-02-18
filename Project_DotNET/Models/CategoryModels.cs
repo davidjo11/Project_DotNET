@@ -55,18 +55,4 @@ namespace Project_DotNET.Models
             return false;
         }
     }
-
-    /*public class CategoryDbContext : DbContext
-    {
-        public CategoryDbContext()
-            : base("NewCo")
-        { }
-
-        public static CategoryDbContext create()
-        {
-            return new CategoryDbContext();
-        }
-
-        public DbSet<Category> Categories { get; set; }
-    }*/
 }

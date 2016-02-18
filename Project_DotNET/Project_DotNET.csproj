@@ -229,9 +229,15 @@
     <Compile Include="Migrations\201602141509568_next.Designer.cs">
       <DependentUpon>201602141509568_next.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602182216374_Migr2.cs" />
+    <Compile Include="Migrations\201602182216374_Migr2.Designer.cs">
+      <DependentUpon>201602182216374_Migr2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CategoryModels.cs" />
+    <Compile Include="Models\RolesIncompatibilities.cs" />
+    <Compile Include="Models\CustomRoleModels.cs" />
     <Compile Include="Models\EntrepriseModels.cs" />
     <Compile Include="Models\MetierModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -242,6 +248,7 @@
     <Compile Include="Utils\AddJobToUserVMValidator.cs" />
     <Compile Include="Utils\CreateCategoryVMValidator.cs" />
     <Compile Include="Utils\CreateJobVMValidator.cs" />
+    <Compile Include="Utils\CreateRoleVMValidator.cs" />
     <Compile Include="Utils\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +315,8 @@
     <Content Include="Views\Manage\ListJobs.cshtml" />
     <Content Include="Views\Manage\CreateCategory.cshtml" />
     <Content Include="Views\Manage\ListCategories.cshtml" />
+    <Content Include="Views\Manage\CreateRole.cshtml" />
+    <Content Include="Views\Manage\ListRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -329,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602141509568_next.resx">
       <DependentUpon>201602141509568_next.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602182216374_Migr2.resx">
+      <DependentUpon>201602182216374_Migr2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

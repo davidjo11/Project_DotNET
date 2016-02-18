@@ -175,9 +175,13 @@ namespace Project_DotNET.Controllers
                     lastName = model.lastName.ToUpper(),
                     Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName).ToLower(),
                     CompanyId = model.SelectedCompany,
-                    JobId = model.SelectedJob
                 };
-                
+                if (model.SelectedJob != 0)
+                    user.JobId = model.SelectedJob;
+
+                if (model.SelectedRole != 0)
+                    user.RoleId = model.SelectedRole;
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -446,7 +450,7 @@ namespace Project_DotNET.Controllers
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Company.CompanyName,  c.firstDay }).ToList();
+                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Roles, c.Company.CompanyName, c.firstDay }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

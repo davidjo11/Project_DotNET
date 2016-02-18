@@ -47,6 +47,10 @@
                             <li class="dropdown-header">Catégories</li>
                             <li>@Html.ActionLink("Créer une catégorie", "CreateCategory", "Manage")</li>
                             <li>@Html.ActionLink("Liste des catégories","ListCategories","Manage")</li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">Roles</li>
+                            <li>@Html.ActionLink("Créer un rôle", "CreateRole", "Manage")</li>
+                            <li>@Html.ActionLink("Liste des rôles", "ListRoles", "Manage")</li>
                         </ul>
                     </li>
                     <li>@Html.ActionLink("À propos de", "About", "Home")</li>

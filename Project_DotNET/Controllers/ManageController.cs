@@ -426,6 +426,96 @@ namespace Project_DotNET.Controllers
         }
 
         [AllowAnonymous]
+        // GET: /Manage/CreateJob
+        public ActionResult CreateRole()
+        {
+            var db = new ApplicationDbContext();
+            var vm = new CreateRoleViewModel()
+            {
+                RolesInc = db.CustomRoles.ToList(),
+            };
+            return View(vm);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // POST: /Manage/CreateRole
+        public ActionResult CreateRole(CreateRoleViewModel model)
+        {
+            CreateRoleVMValidator validator = new CreateRoleVMValidator();
+            ValidationResult result = validator.Validate(model);
+
+            //Traitement
+            var db = new ApplicationDbContext();
+            var RolesDb = db.CustomRoles;
+            var RolesIncDb = db.RolesInc;
+
+            var exists = RolesDb.Select(r => r).Where(r => r.RoleName == model.Name).First();
+            if (result.IsValid || exists == null)
+            {
+
+                /*RolesIncomptabilities rolesInc = new RolesIncomptabilities();
+                //On ajoute les différents rôles incompatibles sélectionnés par l'utilisateur.
+                foreach(var roleId in model.SelectedRolesInc)
+                {
+                    var role = RolesDb.Find(roleId);
+                    rolesInc.addIncompatibilite(role);
+                }
+                RolesIncDb.Add(rolesInc);
+                db.SaveChanges();
+
+                rolesInc = RolesIncDb.Find(rolesInc);*/
+                var newRole = new CustomRole { RoleName = model.Name, RoleDesc = model.Description, };
+                //Ajout à la bdd
+                RolesDb.Add(newRole);
+                //Commit!
+                db.SaveChanges();
+
+                //Ajout des incompatibilités
+                newRole = RolesDb.Select(r => r).Where(r => r.RoleName == model.Name).First();
+                foreach (var roleId in model.SelectedRolesInc)
+                {
+                    var role = RolesDb.Find(roleId);
+                    
+                    //A affiner: ctrl si le rôle n'est pas déjà dedans even though that's a creation
+                    newRole.RolesInc.addIncompatibilite(role);
+                }
+                RolesIncDb.Add(newRole.RolesInc);
+                db.SaveChanges();
+
+                return RedirectToAction("ListRoles", "Manage");
+            }
+
+            foreach (ValidationFailure failer in result.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
+            model.RolesInc = db.CustomRoles.ToList();
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/ListJobs
+        public ActionResult ListRoles()
+        {
+            var RolesDb = new ApplicationDbContext().CustomRoles;
+            ViewBag.roles = RolesDb.Select(r => r).ToList();
+            return View();
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/JsonListJobs
+        public ActionResult JsonListRoles()
+        {
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var data = db.CustomRoles.Select(r => new { r.RoleName, r.RoleDesc, }).ToList();
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AllowAnonymous]
         // GET: /Manage/ListJobs
         public ActionResult ListJobs()
         {
@@ -484,7 +574,7 @@ namespace Project_DotNET.Controllers
             {
                 ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
             }
-            //Redirection vers la liste des périodes pour l'utilisateur concerné
+            //Redirection vers la liste des jobs pour l'utilisateur concerné
             model.Jobs = db.Jobs.ToList();
             model.Users = db.Users.ToList();
             model.Companies = db.Companies.ToList();

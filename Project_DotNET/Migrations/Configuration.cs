@@ -1,6 +1,7 @@
 namespace Project_DotNET.Migrations
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -47,6 +48,14 @@ namespace Project_DotNET.Migrations
                 j => j.JobId,
                 new Models.Job { JobId = 1, CategoryId = 2, JobName = "Développeur" },
                 new Models.Job { JobId = 2, CategoryId = 1, JobName = "Acheteur" }
+                );
+
+            context.CustomRoles.AddOrUpdate(
+                r => r.CustomRoleId,
+                new Models.CustomRole { CustomRoleId = 1, RoleName = "Responsable fonctionnel", RoleDesc = "Tout ce qui est responsabilité fonctionnelle.", },
+                new Models.CustomRole { CustomRoleId = 2, RoleName = "Responsable technique", RoleDesc = "Tout ce qui est responsabilité technique." },
+                new Models.CustomRole { CustomRoleId = 3, RoleName = "Référent fonctionnel", RoleDesc = "Tout ce qui est...?" },
+                new Models.CustomRole { CustomRoleId = 4, RoleName = "Référent technique", RoleDesc = "Tout ce qui est...?" }
                 );
 
             context.SaveChanges();

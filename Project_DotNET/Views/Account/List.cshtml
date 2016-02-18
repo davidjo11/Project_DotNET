@@ -31,17 +31,31 @@
                 "ajax": {
                     "url": "/Account/JsonList",
                     "type": "GET",
-                    "datatype": "json"
+                    "datatype": "json",
+                    "deferRender": true,
+                    "" : ,
                 },
                 "columns": [
                     { "data": "Pseudo", "autowidth": true },
                     { "data": "firstName", "autowidth": true },
                     { "data": "lastName", "autowidth": true },
                     { "data": "JobName", "autowidth": true },
+                    { "data": "Roles", "autowidth" :true },
                     { "data": "CompanyName", "autowidth": true },
                     { "data": "firstDay", "autowidth": true },
                 ]
             })
         })
+
+        /*$('#example tbody').on('click', 'tr', function() {
+    var data = table.fnGetData(this);
+    var newPage = 'http://example.com/page.html';
+    newPage += '?engine='+encodeURIComponent(data[0]);
+    newPage += '&browser='+encodeURIComponent(data[1]);    
+    newPage += '&platform='+encodeURIComponent(data[2]);    
+    //etc ... newPage ends up in something like
+    //http://example.com/page.html?engine=Gecko&browser= ...
+    window.location.href = newPage;
+});*/
     </script>
 }

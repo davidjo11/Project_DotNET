@@ -135,4 +135,18 @@ namespace Project_DotNET.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
     }
+
+    public class CreateRoleViewModel
+    {
+        [Required]
+        [Display(Name = "Nom du rôle")]
+        public string Name { get; set; }
+
+        [Display(Name = "Rôles incompatibles")]
+        public int[] SelectedRolesInc { get; set; }
+        public IEnumerable<CustomRole> RolesInc { get; set; }
+
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+    }
 }
