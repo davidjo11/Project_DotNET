@@ -1,14 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mon application ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("css", required: false)
-    
+
 
 </head>
 <body role="document">
@@ -27,12 +27,13 @@
                     <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
                     <li class="dropdown">
                         <a href="/Account/List" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        Utilisateurs
-                        <span class="caret"></span>
+                            Utilisateurs
+                            <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Lister les contacts", "List", "Account")</li>
                             <li>@Html.ActionLink("Ajouter un métier à un utilisateur", "AddJobToUser", "Manage")</li>
+                            <li>@Html.ActionLink("Ajouter un rôle à un utilisateur", "AddAppRoleToUser", "Manage")</li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -46,7 +47,17 @@
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Catégories</li>
                             <li>@Html.ActionLink("Créer une catégorie", "CreateCategory", "Manage")</li>
-                            <li>@Html.ActionLink("Liste des catégories","ListCategories","Manage")</li>
+                            <li>@Html.ActionLink("Liste des catégories", "ListCategories", "Manage")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="/Manage/ListRoles" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Rôles
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Lister les rôles", "ListAvailableRoles", "Manage")</li>
+                            <li>@Html.ActionLink("Créer un rôle", "CreateAvailableRoles", "Manage")</li>
                         </ul>
                     </li>
                     <li>@Html.ActionLink("À propos de", "About", "Home")</li>
