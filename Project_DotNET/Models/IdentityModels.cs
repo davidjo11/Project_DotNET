@@ -86,7 +86,9 @@ namespace Project_DotNET.Models
             
             return this.Periods.Count == size -1;
         }
-        
+
+
+        public virtual ICollection<AppRole> AppRoles { get; set; }
 
         //Comme l'annotation de base key n'est pas recommandée j'ai utilisé FluentValidation: http://stackoverflow.com/questions/16678625/asp-net-mvc-4-ef5-unique-property-in-model-best-practice
         public class UserValidator : AbstractValidator<ApplicationUser>
@@ -121,26 +123,5 @@ namespace Project_DotNET.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext()
-            : base("NewCo", throwIfV1Schema: false)
-        {
-            //Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseAlways<ApplicationDbContext>()); //Drop database every times
-            //Database.Initialize(true);
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-
-        public DbSet<Category> Categories { get; set; }
-
-        public DbSet<Period> Periods { get; set; }
-
-        public DbSet<Company> Companies { get; set; }
-
-        public DbSet<Job> Jobs { get; set; }
-    }
+   
 }
