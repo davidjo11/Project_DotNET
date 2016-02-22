@@ -18,7 +18,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
@@ -233,6 +234,10 @@
     <Compile Include="Migrations\201602182216374_Migr2.Designer.cs">
       <DependentUpon>201602182216374_Migr2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201602210056254_RolesInc.cs" />
+    <Compile Include="Migrations\201602210056254_RolesInc.Designer.cs">
+      <DependentUpon>201602210056254_RolesInc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CategoryModels.cs" />
@@ -317,6 +322,7 @@
     <Content Include="Views\Manage\ListCategories.cshtml" />
     <Content Include="Views\Manage\CreateRole.cshtml" />
     <Content Include="Views\Manage\ListRoles.cshtml" />
+    <Content Include="Views\Account\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -341,6 +347,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201602182216374_Migr2.resx">
       <DependentUpon>201602182216374_Migr2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602210056254_RolesInc.resx">
+      <DependentUpon>201602210056254_RolesInc.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

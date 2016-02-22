@@ -11,6 +11,7 @@
                 <td>Rôle</td>
                 <td>Rôles incompatibles</td>
                 <td>Description du rôle</td>
+                <td>Supprimer</td>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
                     </select>
                 </td>
                 <td>@role.RoleDesc</td>
+                <td><button value="@role.CustomRoleId">Supprimer</button></td>
             </tr>
             }
         </tbody>
@@ -41,5 +43,40 @@
 @section scripts{
     <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script>
+        $(document).ready(function () {
+            var table = $('#list').DataTable();
+
+            $('#list tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+            //Param: l'id du rôle à effacer et le tr grand-parent du button sélectionné
+            $('#list tbody button').click(function () {
+                var tr_parent = $(this).parent().parent();
+                if (tr_parent.hasClass('selected')) {
+                    tr_parent.removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    tr_parent.addClass('selected');
+                }
+                var resp = confirm("Voulez-vous vraiment effacer ce rôle? ('Ok' pour effacer sinon 'Annuler')");
+                if (resp) {
+                    table.row('.selected').remove().draw(false);
+                    var jqxhr = $.ajax("/Manage/DeleteRole/" + $(this)[0].value)
+                              .done(function () {
+                                  console.log("Success!");
+                              })
+                              .fail(function () {
+                                  console.log("Error: Request has failed!");
+                              });
+                }
+            });
+        });
     </script>
 } 

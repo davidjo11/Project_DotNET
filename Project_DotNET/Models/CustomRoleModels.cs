@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -18,6 +19,7 @@ namespace Project_DotNET.Models
         public string RoleName { get; set; }
 
         //Incompatibilités
+        [InverseProperty("BelongsTo")] 
         public int RolesIncId { get; set; }
 
         public virtual RolesInc RolesInc { get; set; }

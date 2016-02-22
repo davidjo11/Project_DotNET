@@ -54,7 +54,7 @@ namespace Project_DotNET.Utils
             Periods =
                 _db.Periods
                 .Select(x => x)
-                .Where(x => x.User.Id == user.Id && (Tools.InclusiveBetween(debut, x.debut, x.fin) || Tools.InclusiveBetween(fin, x.debut, x.fin) || (Tools.InclusiveBetween(x.debut, debut, fin) || Tools.InclusiveBetween(x.fin, debut, fin))))
+                .Where(x => x.User.Id == user.Id && (debut.CompareTo(x.debut) >= 0 && debut.CompareTo(x.fin) <= 0 || fin.CompareTo(x.debut) >= 0 && fin.CompareTo(x.fin) <= 0 || (x.debut.CompareTo(debut) >= 0 && x.debut.CompareTo(x.fin) <= 0 || x.fin.CompareTo(debut) >= 0 && x.fin.CompareTo(fin) <= 0)))
                 .Count();
 
             //Si'il n'y a aucune intersection alors le nb de périodes est au nb de périodes en bases.

@@ -14,8 +14,23 @@
                 <td>Métier actuel (dernier)</td>
                 <td>Entreprise</td>
                 <td>Date d'entrée dans l'entreprise</td>
+                <td>Actions</td>
             </tr>
         </thead>
+        <tbody>
+            @foreach(var user in ViewBag.users)
+            {
+                <tr id="@user.Id">
+                    <td>@user.Pseudo</td>
+                    <td>@user.firstName</td>
+                    <td>@user.lastName</td>
+                    <td>@user.Job.JobName</td>
+                    <td>@user.Company.CompanyName</td>
+                    <td>@user.firstDay.ToString("dd MMM yyyy")</td>
+                    <td><a class="act_see" href="#" name="@user.Id">Voir plus en détails</a> | <a class="act_del" href="#" name="@user.Id">Supprimer</a></td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 
@@ -27,35 +42,44 @@
     <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#list').DataTable({
+            var table = $("#list").DataTable();
+
+            $("#list tbody a").click(function () {
+                var a = $(this)[0];
+                if ($(this).hasClass("act_see")) {
+                    window.location.href = '/Account/Details/' + a.name;
+                }
+                else if($(this).hasClass("act_del")){
+                    if (confirm("Voulez-vous vraiment supprimer cet utilisateur? (Ok pour oui, Annuler pour non)")) {
+                        var jqxhr = $.ajax("/Account/Delete/" + a.name)
+                              .done(function () {
+                                  console.log("Success!");
+                              })
+                              .fail(function () {
+                                  console.log("Error: Request has failed!");
+                              });
+                        table.row("#" + a.name).remove().draw(false);
+                    }
+                }
+
+            });
+           @* $('#list').DataTable({
                 "ajax": {
                     "url": "/Account/JsonList",
                     "type": "GET",
                     "datatype": "json",
                     "deferRender": true,
-                    "" : ,
                 },
                 "columns": [
                     { "data": "Pseudo", "autowidth": true },
                     { "data": "firstName", "autowidth": true },
                     { "data": "lastName", "autowidth": true },
                     { "data": "JobName", "autowidth": true },
-                    { "data": "Roles", "autowidth" :true },
+                    { "data": "Roles", "autowidth" : true },
                     { "data": "CompanyName", "autowidth": true },
                     { "data": "firstDay", "autowidth": true },
                 ]
-            })
+            })*@
         })
-
-        /*$('#example tbody').on('click', 'tr', function() {
-    var data = table.fnGetData(this);
-    var newPage = 'http://example.com/page.html';
-    newPage += '?engine='+encodeURIComponent(data[0]);
-    newPage += '&browser='+encodeURIComponent(data[1]);    
-    newPage += '&platform='+encodeURIComponent(data[2]);    
-    //etc ... newPage ends up in something like
-    //http://example.com/page.html?engine=Gecko&browser= ...
-    window.location.href = newPage;
-});*/
     </script>
 }

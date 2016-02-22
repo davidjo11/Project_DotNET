@@ -451,8 +451,8 @@ namespace Project_DotNET.Controllers
             var RolesDb = db.CustomRoles;
             var RolesIncDb = db.RolesInc;
 
-            var exists = RolesDb.Select(r => r).Where(r => r.RoleName == model.Name).First();
-            if (result.IsValid || exists == null)
+            var exists = RolesDb.Select(r => r).Where(r => r.RoleName == model.Name).ToList().Count;
+            if (result.IsValid || exists == 0)
             {
 
                 /*RolesIncomptabilities rolesInc = new RolesIncomptabilities();
@@ -480,10 +480,9 @@ namespace Project_DotNET.Controllers
                     
                     //A affiner: ctrl si le rôle n'est pas déjà dedans even though that's a creation
                     newRole.RolesInc.addIncompatibilite(role);
+                    role.RolesInc.addIncompatibilite(newRole);
                 }
-                RolesIncDb.Add(newRole.RolesInc);
                 db.SaveChanges();
-
                 return RedirectToAction("ListRoles", "Manage");
             }
 
@@ -493,6 +492,21 @@ namespace Project_DotNET.Controllers
             }
             model.RolesInc = db.CustomRoles.ToList();
             return View(model);
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/DeleteRole/Id
+        public JsonResult DeleteRole(int id)
+        {
+            var db = new ApplicationDbContext();
+            var role = db.CustomRoles.Find(id);
+
+            if (role == null)
+                return Json(new { data = "Rôle supprimé!" }, JsonRequestBehavior.AllowGet);
+
+            db.CustomRoles.Remove(role);
+            db.SaveChanges();
+            return Json(new { data = "Erreur: Le rôle n'existe pas!" }, JsonRequestBehavior.AllowGet);
         }
 
         [AllowAnonymous]

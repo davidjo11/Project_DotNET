@@ -14,6 +14,8 @@ namespace Project_DotNET.Models
 
         public int RolesIncId { get; set; }
 
+        public virtual CustomRole BelongsTo { get; set; }
+
         public virtual ICollection<CustomRole> Roles { get; set; }
 
         public bool addIncompatibilite(CustomRole role)
@@ -23,9 +25,10 @@ namespace Project_DotNET.Models
             var exists = this.Roles
                 .Select(x => x)
                 .Where(x => x.RoleName == role.RoleName)
-                .First();
+                .ToList()
+                .Count;
 
-            if (exists != null)
+            if (exists != 0)
                 return false;
 
             this.Roles.Add(role);
@@ -39,12 +42,18 @@ namespace Project_DotNET.Models
             var exists = this.Roles
                 .Select(x => x)
                 .Where(x => x.RoleName == role.RoleName)
-                .First();
+                .ToList()
+                .Count;
 
-            if (exists == null)
+            if (exists == 0)
                 return false;
 
-            this.Roles.Remove(exists);
+            var r = this.Roles
+                .Select(x => x)
+                .Where(x => x.RoleName == role.RoleName)
+                .ToList()
+                .First();
+            this.Roles.Remove(r);
             return size - 1 == this.Roles.Count;
         }
     }

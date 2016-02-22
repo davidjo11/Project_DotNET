@@ -175,6 +175,7 @@ namespace Project_DotNET.Controllers
                     lastName = model.lastName.ToUpper(),
                     Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName).ToLower(),
                     CompanyId = model.SelectedCompany,
+                    firstDay = model.firstDay,
                 };
                 if (model.SelectedJob != 0)
                     user.JobId = model.SelectedJob;
@@ -440,6 +441,8 @@ namespace Project_DotNET.Controllers
         [AllowAnonymous]
         public ActionResult List()
         {
+            var db = new ApplicationDbContext();
+            ViewBag.users = db.Users.ToList();
             return View();
         }
 
@@ -453,6 +456,30 @@ namespace Project_DotNET.Controllers
                 var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Roles, c.Company.CompanyName, c.firstDay }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [AllowAnonymous]
+        public ActionResult Details(string id)
+        {
+            var db = new ApplicationDbContext();
+            var user = db.Users.Find(id);
+            if (user == null)
+                return RedirectToAction("List","Account");
+            ViewBag.user = user;
+            return View();
+        }
+
+        [AllowAnonymous]
+        public JsonResult Delete(string id)
+        {
+            var db = new ApplicationDbContext();
+            var user = db.Users.Find(id);
+            if (user == null)
+                return new JsonResult { Data = "Erreur: Cet utilisateur n'existe pas!" };
+
+            db.Users.Remove(user);
+            db.SaveChanges();
+            return new JsonResult { Data = "User supprimé!" };
         }
 
         protected override void Dispose(bool disposing)
