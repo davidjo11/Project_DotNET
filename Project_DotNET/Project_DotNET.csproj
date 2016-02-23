@@ -38,10 +38,6 @@
       <Objects>
         <ObjectGroup Name="NewCo" Order="1" xmlns="">
           <Destination Path="" />
-          <Object Type="DbFullSql" Enabled="True">
-            <PreSource Path="" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
-            <Source Path="obj\Debug\AutoScripts\NewCo_SchemaOnly.sql" Transacted="True" />
-          </Object>
         </ObjectGroup>
       </Objects>
     </PublishDatabaseSettings>
@@ -61,6 +57,10 @@
     </Reference>
     <Reference Include="FluentValidation.Mvc, Version=6.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.MVC5.6.1.0.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="jQuery.Validation.Unobtrusive.Native, Version=1.1.5809.17463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jQuery.Validation.Unobtrusive.Native.MVC5.1.3.0\lib\net45\jQuery.Validation.Unobtrusive.Native.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -216,22 +216,28 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Migrations\201602192037145_Approle-AvailableRole.cs" />
+    <Compile Include="Migrations\201602192037145_Approle-AvailableRole.Designer.cs">
+      <DependentUpon>201602192037145_Approle-AvailableRole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\AddAppRoleToUserVMValidator.cs" />
+    <Compile Include="Utils\CreateAvailableRoleVMValidator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RoleManagerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201602132345160_Initial.cs" />
-    <Compile Include="Migrations\201602132345160_Initial.Designer.cs">
-      <DependentUpon>201602132345160_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201602141509568_next.cs" />
-    <Compile Include="Migrations\201602141509568_next.Designer.cs">
-      <DependentUpon>201602141509568_next.cs</DependentUpon>
+    <Compile Include="Migrations\201602182148107_InitialCreate.cs" />
+    <Compile Include="Migrations\201602182148107_InitialCreate.Designer.cs">
+      <DependentUpon>201602182148107_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AvailableRole.cs" />
     <Compile Include="Models\CategoryModels.cs" />
+    <Compile Include="Models\ApplicationDbContext.cs" />
+    <Compile Include="Models\AppRole.cs" />
     <Compile Include="Models\EntrepriseModels.cs" />
     <Compile Include="Models\MetierModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -247,6 +253,39 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -255,9 +294,12 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\datepicker.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -308,6 +350,9 @@
     <Content Include="Views\Manage\ListJobs.cshtml" />
     <Content Include="Views\Manage\CreateCategory.cshtml" />
     <Content Include="Views\Manage\ListCategories.cshtml" />
+    <Content Include="Views\RoleManager\AddAppRoleToUser.cshtml" />
+    <Content Include="Views\RoleManager\CreateAppRole.cshtml" />
+    <Content Include="Views\RoleManager\ListAvailableRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -324,11 +369,11 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602132345160_Initial.resx">
-      <DependentUpon>201602132345160_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602182148107_InitialCreate.resx">
+      <DependentUpon>201602182148107_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201602141509568_next.resx">
-      <DependentUpon>201602141509568_next.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602192037145_Approle-AvailableRole.resx">
+      <DependentUpon>201602192037145_Approle-AvailableRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
