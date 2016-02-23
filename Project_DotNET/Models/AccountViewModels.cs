@@ -81,7 +81,7 @@ namespace Project_DotNET.Models
 
         [Required]
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd/MM/RR}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Date de naissance")]
         public DateTime birthday { get; set; }
 
@@ -97,7 +97,7 @@ namespace Project_DotNET.Models
 
         [Required]
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd/MM/RR}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Date d'entrée dans l'entreprise")]
         public  DateTime firstDay { get; set; }
 

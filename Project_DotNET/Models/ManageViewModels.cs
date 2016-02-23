@@ -10,6 +10,14 @@ using Project_DotNET.Utils;
 
 namespace Project_DotNET.Models
 {
+
+    /// <summary>
+    /// 
+    /// Define content of views and its constraints
+    /// 
+    /// </summary>
+
+
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
@@ -134,5 +142,52 @@ namespace Project_DotNET.Models
 
         [Display(Name = "Description")]
         public string Description { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// CreateAvailableRoleViewModel
+    /// 
+    /// </summary>
+    public class CreateAvailableRoleViewModel{
+
+        [Display(Name = "Nom du rôle")]
+        public string Name { get; set; }
+
+        [Display(Name = "Description du rôle")]
+        public string Description { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// View AddAppRoleToUserViewModel
+    /// 
+    /// </summary>
+    public class AddAppRoleToUserViewModel
+    {
+        [Display(Name = "Utilisateur")]
+        public string SelectedUser { get; set; }
+        public IEnumerable<ApplicationUser> Users { get; set; }
+
+        [Display(Name = "Métier exercé")]
+        public int SelectedJob { get; set; }
+        public IEnumerable<Job> Jobs { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Début")]
+        public DateTime Debut { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Fin")]
+        public DateTime Fin { get; set; }
+
+        [Display(Name = "Entreprise")]
+        public int SelectedCompany { get; set; }
+        public IEnumerable<Company> Companies { get; set; }
+
+        [Display(Name = "Rôle")]
+        public int SelectedAppRole { get; set; }
+        public IEnumerable<AppRole> AppRoles{ get; set; }
+
     }
 }

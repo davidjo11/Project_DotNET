@@ -26,7 +26,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.birthday, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.birthday, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18) })
+            @Html.TextBoxFor(m => m.birthday, new { @class = "form-control", @type = "date", @Value = DateTime.Today.AddYears(-18).ToString("dd-MM-yyyy") })
         </div>
     </div>
     <div class="form-group">
@@ -44,7 +44,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.firstDay, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.firstDay, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18) })
+            @Html.TextBoxFor(m => m.firstDay, new { @class = "form-control", @type = "date", @Value = @DateTime.Today.AddYears(-5).ToString("dd-MM-yyyy") })
         </div>
     </div>
     <div class="form-group">
@@ -74,4 +74,9 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    @Scripts.Render("~/Content/themes/base/jqueryuicss")
+
+<script type="text/javascript">$('.date').datepicker({dateFormat: "dd-MM-yyyy"});</script>
 }

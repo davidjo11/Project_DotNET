@@ -23,9 +23,13 @@ namespace Project_DotNET.Models
         }
 
         [Column(TypeName = "DateTime2")]
-        public DateTime birthday { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        public DateTime birthday { get; set; } 
 
         [Column(TypeName = "DateTime2")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime firstDay { get; set; }
 
         public int CompanyId { get; set; }
@@ -98,7 +102,7 @@ namespace Project_DotNET.Models
                 RuleFor(x => x.firstName).NotEmpty().WithMessage("Le prénom est requis (2-10 lettres).").Length(2, 10);
                 RuleFor(x => x.lastName).NotEmpty().WithMessage("Le nom est requis (2-10 lettres).").Length(2, 10);
                 //Age adulte requis
-                RuleFor(x => DateTime.Now.Year - x.birthday.Year).GreaterThanOrEqualTo(18).WithMessage("Petit, tu dois avoir plus de 18 ans pour pouvoir travailler.");
+                RuleFor(x => DateTime.Today.Year - x.birthday.Year).GreaterThanOrEqualTo(18).WithMessage("Petit, tu dois avoir plus de 18 ans pour pouvoir travailler.");
                 RuleFor(x => x).Must(x => { return correctDates(x.birthday, x.firstDay); }).WithMessage("La date d'entrée dans l'entreprise doit être strictement supérieure à la date de naissance.");
                 //RuleForEach(x => x.Periods).SetValidator(new Period.PeriodValidator());
             }
@@ -111,7 +115,7 @@ namespace Project_DotNET.Models
 
         public string dateToString()
         {
-            return this.birthday.ToString("dd/MM/RR");
+            return this.birthday.ToString("dd-MM-yyyy");
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
