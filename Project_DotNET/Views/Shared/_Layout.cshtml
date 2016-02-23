@@ -33,7 +33,7 @@
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Lister les contacts", "List", "Account")</li>
                             <li>@Html.ActionLink("Ajouter un métier à un utilisateur", "AddJobToUser", "Manage")</li>
-                            <li>@Html.ActionLink("Ajouter un rôle à un utilisateur", "AddAppRoleToUser", "Manage")</li>
+                            <li>@Html.ActionLink("Ajouter un rôle à un utilisateur", "AddAppRoleToUser", "RoleManager")</li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -56,8 +56,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Lister les rôles", "ListAvailableRoles", "Manage")</li>
-                            <li>@Html.ActionLink("Créer un rôle", "CreateAvailableRoles", "Manage")</li>
+                            <li>@Html.ActionLink("Lister les rôles", "ListAvailableRoles", "RoleManager")</li>
+                            <li>@Html.ActionLink("Créer un rôle", "CreateAvailableRoles", "RoleManager")</li>
                         </ul>
                     </li>
                     <li>@Html.ActionLink("À propos de", "About", "Home")</li>
@@ -71,7 +71,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Today.Year - My ASP.NET Application</p>
         </footer>
     </div>
 
@@ -79,4 +79,5 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
+
 </html>
