@@ -51,11 +51,11 @@ Warning, all data not present in the seed method will be lost.
 
 * delete database in SQL explorer with close connection selected
 
-	add-migration InitialCreate
+		add-migration InitialCreate
 	
 * Insert the here under 
 
-	update-database
+		update-database
 
 
 ##To be inserted in seed method of migration/configuration.cs after the comments.
