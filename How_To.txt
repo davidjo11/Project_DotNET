@@ -1,0 +1,16 @@
+In case, cshtml or other settings is not readable/usable:
+
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe /ResetUserData
+
+
+#primary key def in c# entity
+
+Convention: Property with name "Id" or property with name {class name} + "Id" (both are case insensitive)
+Data Annotation: [Key] attribute
+Fluent API: Entity<T>.HasKey(p => p.PropertyName) function
+
+#Data Annotation
+
+https://msdn.microsoft.com/en-us/data/jj591583.aspx
+
+ Install-Package jQuery.Validation.Unobtrusive.Native.MVC5
