@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Liste des rôles";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div style="margin:auto">
+    <table id="list" class="table table-striped table-hover dt-responsive">
+        <thead>
+            <tr>
+                <td>Rôle</td>
+                <td>Description du rôle</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section css{
+    <link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#list').DataTable({
+                "ajax": {
+                    "url": "/RoleManager/JsonListAvailableRoles",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "AvailableRoleName", "autowidth": true },
+                    { "data": "AvailableRoleDesc", "autowidth": true },
+                ]
+            })
+        })
+    </script>
+}
