@@ -25,7 +25,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Job> Jobs { get; set; }
 
-    public DbSet<AppRole> AppRoles { get; set; }
-
     public DbSet<AvailableRole> AvailableRoles { get; set; }
 }

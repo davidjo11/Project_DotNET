@@ -169,25 +169,9 @@ namespace Project_DotNET.Models
         public string SelectedUser { get; set; }
         public IEnumerable<ApplicationUser> Users { get; set; }
 
-        [Display(Name = "Métier exercé")]
-        public int SelectedJob { get; set; }
-        public IEnumerable<Job> Jobs { get; set; }
-
-        [DataType(DataType.Date)]
-        [Display(Name = "Début")]
-        public DateTime Debut { get; set; }
-
-        [DataType(DataType.Date)]
-        [Display(Name = "Fin")]
-        public DateTime Fin { get; set; }
-
-        [Display(Name = "Entreprise")]
-        public int SelectedCompany { get; set; }
-        public IEnumerable<Company> Companies { get; set; }
-
         [Display(Name = "Rôle")]
-        public int SelectedAppRole { get; set; }
-        public IEnumerable<AppRole> AppRoles{ get; set; }
+        public int SelectedAvailableRole { get; set; }
+        public IEnumerable<AvailableRole> AvailableRoles{ get; set; }
 
     }
 }

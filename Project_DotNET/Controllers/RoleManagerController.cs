@@ -78,6 +78,7 @@ namespace Project_DotNET.Controllers
 
 
         [AllowAnonymous]
+        //
         // GET: /RoleManager/ListAvailableRoles
         public ActionResult ListAvailableRoles()
         {
@@ -85,6 +86,7 @@ namespace Project_DotNET.Controllers
         }
 
         [AllowAnonymous]
+        //
         // GET: /RoleManager/JsonListAvailableRoles
         public ActionResult JsonListAvailableRoles()
         {
@@ -96,8 +98,8 @@ namespace Project_DotNET.Controllers
         }
        
         [AllowAnonymous]
-        // GET: /RoleManager/CreateRole
-        public ActionResult CreateRole()
+        // GET: /RoleManager/CreateAvailableRole
+        public ActionResult CreateAvailableRole()
         {
             var db = new ApplicationDbContext();
             return View();
@@ -106,20 +108,20 @@ namespace Project_DotNET.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // POST: /RoleManager/Create
-        public ActionResult CreateAppRole(CreateAvailableRoleViewModel model)
+        // POST: /RoleManager/CreateAvailableRole
+        public ActionResult CreateAvailableRole(CreateAvailableRoleViewModel model)
         {
-            /*
-            CreateAppRoleVMValidator validator = new CreateAppRoleVMValidator();
-            ValidationResult result = validator.Validate(model);
+            
+            //CreateAppRoleVMValidator validator = new CreateAppRoleVMValidator();
+            //ValidationResult result = validator.Validate(model);
 
             //Traitement
             var db = new ApplicationDbContext();
-            if (result.IsValid)
+            if (true) //result.IsValid)
             {
-                var AvailableRoleDb = db.AppRoles;
+                var AvailableRoleDb = db.AvailableRoles;
 
-                var newRole = new AvailableRoleModels { AvailableRoleName = model.Name, AvailableRoleDesc = model.Description };
+                var newRole = new AvailableRole { AvailableRoleName = model.Name, AvailableRoleDesc = model.Description };
                 //Ajout à la bdd
                 AvailableRoleDb.Add(newRole);
                 //Commit!
@@ -128,6 +130,7 @@ namespace Project_DotNET.Controllers
                 return RedirectToAction("ListAvailableRoles", "RoleManager");
             }
             
+            /*
             foreach (ValidationFailure failer in result.Errors)
             {
                 ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
@@ -139,116 +142,22 @@ namespace Project_DotNET.Controllers
 
       
 
-        [AllowAnonymous]
-        // GET: /RoleManager/CreateJob
-        public ActionResult CreateJob()
-        {
-            var db = new ApplicationDbContext();
-            var vm = new CreateJobViewModel()
-            {
-                Categories = db.Categories.ToList(),
-            };
-            return View(vm);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        // POST: /Manage/CreateJob
-        public ActionResult CreateJob(CreateJobViewModel model)
-        {
-            CreateJobVMValidator validator = new CreateJobVMValidator();
-            ValidationResult result = validator.Validate(model);
-
-            //Traitement
-            var db = new ApplicationDbContext();
-            if (result.IsValid)
-            {
-                var JobDb = db.Jobs;
-
-                var newJob = new Job { JobName = model.Name, JobDesc = model.Description, CategoryId = model.SelectedCategory };
-                //Ajout à la bdd
-                JobDb.Add(newJob);
-                //Commit!
-                db.SaveChanges();
-
-                return RedirectToAction("ListJobs", "Manage");
-            }
-
-            foreach (ValidationFailure failer in result.Errors)
-            {
-                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
-            }
-            //Redirection vers la liste des périodes pour l'utilisateur concerné
-            model.Categories = db.Categories.ToList();
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        // GET: /Manage/ListJobs
-        public ActionResult ListJobs()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        // GET: /Manage/JsonListJobs
-        public ActionResult JsonListJobs()
-        {
-            using (ApplicationDbContext db = new ApplicationDbContext())
-            {
-                var data = db.Jobs.Select(j => new { j.JobName, j.Category.CategoryName, j.JobDesc }).ToList();
-                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
-            }
-        }
+    
 
         [AllowAnonymous]
         // GET: /Manage/AddJobToUser (creates a period)
-        public ActionResult AddJobToUser()
+        public ActionResult AddAppRoleToUser()
         {
             var db = new ApplicationDbContext();
-            var vm = new AddJobToUserViewModel()
+            var vm = new AddAppRoleToUserViewModel()
             {
-                Jobs = db.Jobs.ToList(),
-                Users = db.Users.ToList(),
-                Companies = db.Companies.ToList(),
+               AvailableRoles = db.AvailableRoles.ToList(),
+               Users = db.Users.ToList()
             };
             return View(vm);
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        // POST: /Manage/CreateJob
-        public ActionResult AddJobToUser(AddJobToUserViewModel model)
-        {
-            AddJobToUserVMValidator validator = new AddJobToUserVMValidator();
-            ValidationResult result = validator.Validate(model);
-
-            //Traitement
-            var db = new ApplicationDbContext();
-            if (result.IsValid)
-            {
-                var PeriodsDb = db.Periods;
-
-                var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser };
-
-                PeriodsDb.Add(period);
-                db.SaveChanges();
-
-                return RedirectToAction("List", "Account");
-            }
-
-            foreach (ValidationFailure failer in result.Errors)
-            {
-                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
-            }
-            //Redirection vers la liste des périodes pour l'utilisateur concerné
-            model.Jobs = db.Jobs.ToList();
-            model.Users = db.Users.ToList();
-            model.Companies = db.Companies.ToList();
-            return View(model);
-        }
+     
 
         protected override void Dispose(bool disposing)
         {

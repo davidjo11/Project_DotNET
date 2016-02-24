@@ -40,6 +40,9 @@ namespace Project_DotNET.Models
 
         public virtual Job Job { get; set; }
 
+        public int AvailableRoleId { get; set; }
+        public virtual AvailableRole AvailableRole { get; set; }
+
         public string firstName { get; set; }
 
         public string lastName { get; set; }
