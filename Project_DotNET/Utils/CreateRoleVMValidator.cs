@@ -8,21 +8,22 @@ using System.Threading.Tasks;
 
 namespace Project_DotNET.Utils
 {
-    public class CreateRoleVMValidator : AbstractValidator<CreateRoleViewModel>
+    public class CreateRoleVMValidator : AbstractValidator<CreateAvailableRoleViewModel>
     {
         public CreateRoleVMValidator()
         {
-            RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name); }).WithMessage("Ce rôle existe déjà.");
+            var db = new ApplicationDbContext();
+            RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name);}).WithMessage("Ce rôle existe déjà.");
         }
 
-        private bool notExists(string name)
+        public bool notExists(string name)
         {
             var _db = new ApplicationDbContext();
 
             var nb = _db
-                .CustomRoles
+                .AvailableRoles
                 .Select(x => x)
-                .Where(x => x.RoleName == name)
+                .Where(x => x.AvailableRoleName == name)
                 .Count();
             return nb == 0 ? true : false;
         }

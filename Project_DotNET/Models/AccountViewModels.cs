@@ -91,11 +91,6 @@ namespace Project_DotNET.Models
         public IEnumerable<Job> Jobs { get; set; }
 
         [Required]
-        [Display(Name = "Rôle")]
-        public int SelectedRole { get; set; }
-        public IEnumerable<CustomRole> Roles { get; set; }
-
-        [Required]
         [Display(Name = "Entreprise")]
         public int SelectedCompany { get; set; }
         public IEnumerable<Company> Companies { get; set; }

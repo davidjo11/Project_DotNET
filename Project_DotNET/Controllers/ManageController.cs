@@ -34,9 +34,9 @@ namespace Project_DotNET.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -426,107 +426,60 @@ namespace Project_DotNET.Controllers
         }
 
         [AllowAnonymous]
-        // GET: /Manage/CreateJob
+        // GET: /RoleManager/ListAvailableRoles
+        public ActionResult ListAvailableRoles()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        // GET: /RoleManager/JsonListAvailableRoles
+        public ActionResult JsonListAvailableRoles()
+        {
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var data = db.AvailableRoles.Select(ar => new { ar.AvailableRoleName, ar.AvailableRoleDesc }).ToList();
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AllowAnonymous]
+        // GET: /Manage/CreateRole
         public ActionResult CreateRole()
         {
-            var db = new ApplicationDbContext();
-            var vm = new CreateRoleViewModel()
-            {
-                RolesInc = db.CustomRoles.ToList(),
-            };
-            return View(vm);
+            return View();
         }
 
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         // POST: /Manage/CreateRole
-        public ActionResult CreateRole(CreateRoleViewModel model)
+        public ActionResult CreateRole(CreateAvailableRoleViewModel model)
         {
             CreateRoleVMValidator validator = new CreateRoleVMValidator();
             ValidationResult result = validator.Validate(model);
 
             //Traitement
             var db = new ApplicationDbContext();
-            var RolesDb = db.CustomRoles;
-            var RolesIncDb = db.RolesInc;
-
-            var exists = RolesDb.Select(r => r).Where(r => r.RoleName == model.Name).ToList().Count;
-            if (result.IsValid || exists == 0)
+            var RolesDb = db.AvailableRoles;
+            
+            if (result.IsValid)
             {
 
-                /*RolesIncomptabilities rolesInc = new RolesIncomptabilities();
-                //On ajoute les différents rôles incompatibles sélectionnés par l'utilisateur.
-                foreach(var roleId in model.SelectedRolesInc)
-                {
-                    var role = RolesDb.Find(roleId);
-                    rolesInc.addIncompatibilite(role);
-                }
-                RolesIncDb.Add(rolesInc);
-                db.SaveChanges();
-
-                rolesInc = RolesIncDb.Find(rolesInc);*/
-                var newRole = new CustomRole { RoleName = model.Name, RoleDesc = model.Description, };
+                var newRole = new AvailableRole { AvailableRoleName = model.Name, AvailableRoleDesc = model.Description, };
                 //Ajout à la bdd
                 RolesDb.Add(newRole);
-                //Commit!
+                //Commit!                
                 db.SaveChanges();
-
-                //Ajout des incompatibilités
-                newRole = RolesDb.Select(r => r).Where(r => r.RoleName == model.Name).First();
-                foreach (var roleId in model.SelectedRolesInc)
-                {
-                    var role = RolesDb.Find(roleId);
-                    
-                    //A affiner: ctrl si le rôle n'est pas déjà dedans even though that's a creation
-                    newRole.RolesInc.addIncompatibilite(role);
-                    role.RolesInc.addIncompatibilite(newRole);
-                }
-                db.SaveChanges();
-                return RedirectToAction("ListRoles", "Manage");
+                return RedirectToAction("ListAvailableRoles", "Manage");
             }
 
             foreach (ValidationFailure failer in result.Errors)
             {
                 ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
             }
-            model.RolesInc = db.CustomRoles.ToList();
+
             return View(model);
-        }
-
-        [AllowAnonymous]
-        // GET: /Manage/DeleteRole/Id
-        public JsonResult DeleteRole(int id)
-        {
-            var db = new ApplicationDbContext();
-            var role = db.CustomRoles.Find(id);
-
-            if (role == null)
-                return Json(new { data = "Rôle supprimé!" }, JsonRequestBehavior.AllowGet);
-
-            db.CustomRoles.Remove(role);
-            db.SaveChanges();
-            return Json(new { data = "Erreur: Le rôle n'existe pas!" }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AllowAnonymous]
-        // GET: /Manage/ListJobs
-        public ActionResult ListRoles()
-        {
-            var RolesDb = new ApplicationDbContext().CustomRoles;
-            ViewBag.roles = RolesDb.Select(r => r).ToList();
-            return View();
-        }
-
-        [AllowAnonymous]
-        // GET: /Manage/JsonListJobs
-        public ActionResult JsonListRoles()
-        {
-            using (ApplicationDbContext db = new ApplicationDbContext())
-            {
-                var data = db.CustomRoles.Select(r => new { r.RoleName, r.RoleDesc, }).ToList();
-                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
-            }
         }
 
         [AllowAnonymous]
@@ -557,6 +510,7 @@ namespace Project_DotNET.Controllers
                 Jobs = db.Jobs.ToList(),
                 Users = db.Users.ToList(),
                 Companies = db.Companies.ToList(),
+                Roles = db.AvailableRoles.ToList(),
             };
             return View(vm);
         }
@@ -570,28 +524,49 @@ namespace Project_DotNET.Controllers
             AddJobToUserVMValidator validator = new AddJobToUserVMValidator();
             ValidationResult result = validator.Validate(model);
 
+            /*Les initialisations sont là pour éviter les problèmes d'objets à cause des if ...*/
+            AppRole appRole = new AppRole();
+            AppRoleValidator forAppRole = new AppRoleValidator();
+            ValidationResult roleResult = forAppRole.Validate(appRole);
+
             //Traitement
             var db = new ApplicationDbContext();
             if (result.IsValid)
             {
-                var PeriodsDb = db.Periods;
+                foreach(var id in model.SelectedRoles)
+                {
+                    appRole.addRole(db.AvailableRoles.Find(id));
+                }
+                
+                roleResult = forAppRole.Validate(appRole);
 
-                var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser };
+                if (roleResult.IsValid)
+                {
+                    var PeriodsDb = db.Periods;
 
-                PeriodsDb.Add(period);
-                db.SaveChanges();
+                    var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser, AppRole = appRole };
 
-                return RedirectToAction("List", "Account");
+                    PeriodsDb.Add(period);
+                    db.SaveChanges();
+
+                    return RedirectToAction("List", "Account");
+                }
             }
 
             foreach (ValidationFailure failer in result.Errors)
             {
                 ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
             }
+            foreach (ValidationFailure failer in roleResult.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
+
             //Redirection vers la liste des jobs pour l'utilisateur concerné
             model.Jobs = db.Jobs.ToList();
             model.Users = db.Users.ToList();
             model.Companies = db.Companies.ToList();
+            model.Roles = db.AvailableRoles.ToList();
             return View(model);
         }
 
@@ -606,7 +581,7 @@ namespace Project_DotNET.Controllers
             base.Dispose(disposing);
         }
 
-#region Programmes d'assistance
+        #region Programmes d'assistance
         // Utilisé pour la protection XSRF lors de l'ajout de connexions externes
         private const string XsrfKey = "XsrfId";
 
@@ -657,6 +632,6 @@ namespace Project_DotNET.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

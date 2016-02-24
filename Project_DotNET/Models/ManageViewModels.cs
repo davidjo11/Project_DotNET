@@ -114,6 +114,10 @@ namespace Project_DotNET.Models
         public int SelectedJob { get; set; }
         public IEnumerable<Job> Jobs { get; set; }
         
+        [Display(Name = "Rôle occupé")]
+        public int[] SelectedRoles { get; set; }
+        public IEnumerable<AvailableRole> Roles { get; set; }
+
         [DataType(DataType.Date)]
         [Display(Name = "Début")]
         public DateTime Debut { get; set; }
@@ -125,6 +129,7 @@ namespace Project_DotNET.Models
         [Display(Name = "Entreprise")]
         public int SelectedCompany { get; set; }
         public IEnumerable<Company> Companies { get; set; }
+
     }
 
     public class CreateCategoryViewModel
@@ -136,15 +141,11 @@ namespace Project_DotNET.Models
         public string Description { get; set; }
     }
 
-    public class CreateRoleViewModel
+    public class CreateAvailableRoleViewModel
     {
         [Required]
         [Display(Name = "Nom du rôle")]
         public string Name { get; set; }
-
-        [Display(Name = "Rôles incompatibles")]
-        public int[] SelectedRolesInc { get; set; }
-        public IEnumerable<CustomRole> RolesInc { get; set; }
 
         [Display(Name = "Description")]
         public string Description { get; set; }

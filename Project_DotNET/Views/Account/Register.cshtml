@@ -16,54 +16,63 @@
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.firstName, new { @class = "form-control"})
         </div>
+        @Html.ValidationMessageFor(m => m.lastName)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.lastName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.lastName, new { @class = "form-control" })
         </div>
+        @Html.ValidationMessageFor(m => m.firstName)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.birthday, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.birthday, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18) })
+            @Html.TextBoxFor(m => m.birthday, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd") })
         </div>
+        @Html.ValidationMessageFor(m => m.birthday)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedJob, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
              @Html.DropDownListFor(m => m.SelectedJob, new SelectList(Model.Jobs.Select(j => new SelectListItem() { Text = j.JobId.ToString(), Value = j.JobName }), "Text", "Value", Model.Jobs.First().JobId), "Selectionnez votre métier", new { @class = "form-control" })
         </div>
+        @Html.ValidationMessageFor(m => m.SelectedJob)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label"})
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(c => new SelectListItem() { Text = c.CompanyId.ToString(), Value = c.CompanyName + ", " + c.city + ", " + c.country}), "Text", "Value",Model.Companies.First().CompanyId), "Selectionnez votre entreprise", new { @class = "form-control" })
         </div>
+        @Html.ValidationMessageFor(m => m.SelectedCompany)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.firstDay, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.firstDay, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18) })
+            @Html.TextBoxFor(m => m.firstDay, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-5).ToString("yyyy-MM-dd") })
         </div>
+        @Html.ValidationMessageFor(m => m.firstDay)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
         </div>
+        @Html.ValidationMessageFor(m => m.Email)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
         </div>
+        @Html.ValidationMessageFor(m => m.Password)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
+        @Html.ValidationMessageFor(m => m.ConfirmPassword)
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

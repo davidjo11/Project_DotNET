@@ -13,7 +13,7 @@ namespace Project_DotNET.Utils
         public CreateJobVMValidator()
         {
             var db = new ApplicationDbContext();
-            RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name, x.SelectedCategory); }).WithMessage("Ce nom existe déjà.");
+            RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name, x.SelectedCategory); }).WithMessage("Ce nom de métier existe déjà.");
         }
 
         public bool notExists(string name, int companyId)
@@ -23,7 +23,7 @@ namespace Project_DotNET.Utils
             var nb = _db
                 .Jobs
                 .Select(x => x)
-                .Where(x => x.JobName == name && x.CategoryId == companyId )
+                .Where(x => x.JobName == name && x.CategoryId == companyId)
                 .Count();
             return nb == 0 ? true : false;
         }

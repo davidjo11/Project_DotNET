@@ -23,11 +23,6 @@ namespace Project_DotNET.Utils
             RuleFor(x => x.Fin).NotNull().WithMessage("La date de fin ne peut être nulle.");
             RuleFor(x => x.Fin).LessThanOrEqualTo(DateTime.Now).WithMessage("La date de fin ne peut être inférieure à aujourd'hui.");
             RuleFor(x => x.Debut).LessThan(x => x.Fin).WithMessage("La date de debut doit être inférieure à la date de fin.");
-            //La date de début ne peut être supérieure ou égale à la date de fin (si non nulle) ou courante (aujourd'hui)
-            //RuleFor(x => x.debut).LessThanOrEqualTo(DateTime.Now).When(x => x.fin == null).WithMessage("La date de début doit être antérieure à la date d'aujourd'hui.");
-            //La période se trouve avant ou après toutes les périodes existantes
-            //RuleFor(x => x.debut).Must(noIntersection).WithMessage("L'utilisateur travaillait déjà dans une autre Company à cette date.");
-            //RuleFor(x => new DateTime[]{ x.debut, x.fin}).Must(noIntersection).WithMessage("Une partie de cette période est déjà utilisée.");
             RuleFor(x => x.Debut).Must((x, debut) => { return noIntersection(db.Users.Find(x.SelectedUser), x.Debut, x.Fin); }).WithMessage("La période se croise avec une autre période existante.");
         }
 
@@ -44,13 +39,7 @@ namespace Project_DotNET.Utils
             // - soit il n'existe aucune période pour laquelle la date de fin est supérieure à la date de deb. en param.
             //Périodes qui croisent pas la nouvelle: http://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods
             Periods = 0;
-            /*Periods =
-                _db.Periods
-                .Select(x => x)
-                .Where(x => x.User.Id == user.Id && x.fin != null && (x.debut.CompareTo(fin) == 1 && x.fin.CompareTo(debut) == -1)).Count();
-            if (p_en_cours != null)
-                Periods++;
-                */
+           
             Periods =
                 _db.Periods
                 .Select(x => x)

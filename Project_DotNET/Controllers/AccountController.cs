@@ -176,12 +176,9 @@ namespace Project_DotNET.Controllers
                     Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName).ToLower(),
                     CompanyId = model.SelectedCompany,
                     firstDay = model.firstDay,
+                    JobId = model.SelectedJob,
                 };
-                if (model.SelectedJob != 0)
-                    user.JobId = model.SelectedJob;
-
-                if (model.SelectedRole != 0)
-                    user.RoleId = model.SelectedRole;
+                
 
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

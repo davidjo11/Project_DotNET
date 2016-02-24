@@ -22,5 +22,7 @@ namespace Project_DotNET.Utils
         {
             return InclusiveBetween(a, b, c);
         }
+
+        public static string[] connections = new string[] { "NewCo", "NewCo2" };
     }
 }

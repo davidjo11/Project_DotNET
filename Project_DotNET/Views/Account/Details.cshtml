@@ -1,13 +1,17 @@
-﻿@{
-    ViewBag.Title = "Détails";
+﻿@using Project_DotNET.Models
+@{
+    ViewBag.Title = "Curriculum-vitae";
 }
 
 <h2>@ViewBag.Title</h2>
 <div>
-    <h4>Informations</h4><br />
-    <p>Mettre les infos (nom, prénom, email,etc....)</p><br />
+    <h4>Informations générales</h4><br />
+    <p>@ViewBag.user.firstName<br />
+    @ViewBag.user.lastName<br />
+    @ViewBag.user.birthday.ToString("dd MMM yyyy")<br />
+    </p><br />
 
-    <h4>Expériences précédentes <button onclick="addJob()">Ajouter une expérience</button></h4> <br />
+    <h4>Expériences précédentes <button onclick="addJob()">Ajouter une expérience au profil</button></h4> <br />
     <table id="list" class="table table-striped table-hover dt-responsive">
         <thead>
             <tr>
@@ -16,6 +20,7 @@
                 <td>Métier exercé</td>
                 <td>Entreprise</td>
                 <td>Ville</td>
+                <td>Rôle(s) occupé(s)</td>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +30,7 @@
                 <td>@ViewBag.user.Job.JobName</td>
                 <td>@ViewBag.user.Company.CompanyName</td>
                 <td>@ViewBag.user.Company.city</td>
+                <td>En construction</td>
             </tr>
             @foreach (var period in ViewBag.user.Periods)
             {
@@ -34,6 +40,14 @@
                     <td>@period.Job.JobName</td>
                     <td>@period.Company.CompanyName</td>
                     <td>@period.Company.city</td>
+                    <td>
+                        <select multiple>
+                            @foreach (var role in (IEnumerable<AvailableRole>)@period.AppRoles.AppRoles)
+                            {
+                                <option>@role.AvailableRoleName</option>
+                            }
+                        </select>
+                    </td>
                 </tr>
             }
         </tbody>

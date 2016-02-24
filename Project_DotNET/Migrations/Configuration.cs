@@ -1,7 +1,6 @@
 namespace Project_DotNET.Migrations
 {
     using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -27,6 +26,7 @@ namespace Project_DotNET.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
             context.Categories.AddOrUpdate(
 
                 c => c.CategoryId,
@@ -50,12 +50,16 @@ namespace Project_DotNET.Migrations
                 new Models.Job { JobId = 2, CategoryId = 1, JobName = "Acheteur" }
                 );
 
-            context.CustomRoles.AddOrUpdate(
-                r => r.CustomRoleId,
-                new Models.CustomRole { CustomRoleId = 1, RoleName = "Responsable fonctionnel", RoleDesc = "Tout ce qui est responsabilité fonctionnelle.", },
-                new Models.CustomRole { CustomRoleId = 2, RoleName = "Responsable technique", RoleDesc = "Tout ce qui est responsabilité technique." },
-                new Models.CustomRole { CustomRoleId = 3, RoleName = "Référent fonctionnel", RoleDesc = "Tout ce qui est...?" },
-                new Models.CustomRole { CustomRoleId = 4, RoleName = "Référent technique", RoleDesc = "Tout ce qui est...?" }
+            context.AvailableRoles.AddOrUpdate(
+                r => r.AvailableRoleId,
+                new Models.AvailableRole { AvailableRoleId = 1, AvailableRoleName = "Manager", AvailableRoleDesc = "ceci est un manager" },
+                new Models.AvailableRole { AvailableRoleId = 2, AvailableRoleName = "Chef d'équipe", AvailableRoleDesc = "ceci est un chef d'équipe " },
+                new Models.AvailableRole { AvailableRoleId = 3, AvailableRoleName = "Responsable fonctionnel", AvailableRoleDesc = "ceci est un resp fonc" },
+                new Models.AvailableRole { AvailableRoleId = 4, AvailableRoleName = "Responsable technique", AvailableRoleDesc = "ceci est un resp tec" },
+                new Models.AvailableRole { AvailableRoleId = 5, AvailableRoleName = "Apprenti", AvailableRoleDesc = "ceci est un apprenti" },
+                new Models.AvailableRole { AvailableRoleId = 6, AvailableRoleName = "Coordinateur", AvailableRoleDesc = "ceci est un coordinateur" },
+                new Models.AvailableRole { AvailableRoleId = 7, AvailableRoleName = "Référent fonctionnel", AvailableRoleDesc = "ceci est un ref fonc" },
+                new Models.AvailableRole { AvailableRoleId = 8, AvailableRoleName = "Référent technique", AvailableRoleDesc = "ceci est un ref tec" }
                 );
 
             context.SaveChanges();

@@ -2,6 +2,7 @@
 using FluentValidation.Attributes;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Project_DotNET.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -40,10 +41,6 @@ namespace Project_DotNET.Models
 
         public string lastName { get; set; }
 
-        public int RoleId { get; set; }
-
-        public virtual CustomRole Role { get; set; }
-
         //Matricule
         public string Pseudo { get; set; }
 
@@ -56,24 +53,6 @@ namespace Project_DotNET.Models
         public bool addPeriod(Period Period)
         {
             var size = this.Periods.Count;
-
-            /*if (this.LastPeriod.isEnCours() && (Period.isEnCours()))//Cas ajout d'une période en cours alors qu'il y en a déjà.
-                return false;
-            if(this.LastPeriod.fin.CompareTo(Period.debut) > -1)//Ajout d'un
-
-            this.Periods.Add(Period);
-            if(size + 1 == this.Periods.Count)
-            {
-                //this.Periods.Sort((x, y) => DateTime.Compare(x.debut, y.debut));
-                this.Periods.OrderBy(x => x.debut);
-                //Actualisation de la période en cours (ou derniere période)
-                //this.Period = this.Periods.Last();
-                //Actualisation du Job courant
-                //this.Job = this.Periods.Last().Job.JobName;
-                //Actualisation firstDay
-                this.firstDay = this.Periods.Last().debut;
-                return true;
-            }*/
             this.Periods.Add(Period);
             this.Periods.OrderBy(x => x.debut);
             return size + 1 == Periods.Count;
@@ -87,10 +66,24 @@ namespace Project_DotNET.Models
             var _db = new ApplicationDbContext().Periods;
             var size = this.Periods.Count;
             var removed = this.Periods.Remove(this.Periods.Last());
-            
+            this.Periods.OrderBy(x => x.debut);
+
             return this.Periods.Count == size -1;
         }
-        
+
+        public bool removePeriod(Period period)
+        {
+            if (this.Periods.Count == 0)
+                return false;
+
+            var _db = new ApplicationDbContext().Periods;
+            var size = this.Periods.Count;
+            this.Periods.OrderBy(x => x.debut);
+            var removed = this.Periods.Remove(period);
+
+            return this.Periods.Count == size - 1;
+        }
+
 
         //Comme l'annotation de base key n'est pas recommandée j'ai utilisé FluentValidation: http://stackoverflow.com/questions/16678625/asp-net-mvc-4-ef5-unique-property-in-model-best-practice
         public class UserValidator : AbstractValidator<ApplicationUser>
@@ -113,7 +106,7 @@ namespace Project_DotNET.Models
 
         public string dateToString()
         {
-            return this.birthday.ToString("dd/MM/RR");
+            return this.birthday.ToString("dd-MM-yyyy");
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -128,7 +121,7 @@ namespace Project_DotNET.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("NewCo", throwIfV1Schema: false)
+            : base(Tools.connections[0], throwIfV1Schema: false)
         {
             //Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseAlways<ApplicationDbContext>()); //Drop database every times
             //Database.Initialize(true);
@@ -147,8 +140,8 @@ namespace Project_DotNET.Models
 
         public DbSet<Job> Jobs { get; set; }
 
-        public DbSet<CustomRole> CustomRoles { get; set; }
+        public DbSet<AppRole> AppRoles { get; set; }
 
-        public DbSet<RolesInc> RolesInc { get; set; }
+        public DbSet<AvailableRole> AvailableRoles { get; set; }
     }
 }
