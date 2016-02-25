@@ -1,5 +1,5 @@
-﻿@model Project_DotNET.Models.AddJobToUserViewModel
-@{
+﻿@model Project_DotNET.Models.AddAppRoleToUserViewModel
+@{ 
     ViewBag.Title = "Ajouter un rôle à un utilisateur";
 }
 
@@ -19,36 +19,15 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.SelectedJob, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.SelectedAvailableRole, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedJob, new SelectList(Model.Jobs.Select(j => new SelectListItem() { Text = j.JobId.ToString(), Value = j.JobName }), "Text", "Value", Model.Jobs.First().JobId), "Sélectionnez le métier", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.SelectedJob)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Debut, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Debut, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd") })
-            @Html.ValidationMessageFor(m => m.Debut)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Fin, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Fin, new { @class = "form-control", @type = "date", @Value = @DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd") })
-            @Html.ValidationMessageFor(m => m.Fin)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(j => new SelectListItem() { Text = j.CompanyId.ToString(), Value = j.CompanyName +", "+j.CompanyName+", " + j.country }), "Text", "Value", Model.Companies.First().CompanyId), "Sélectionnez l'entreprise", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.SelectedCompany)
+            @Html.DropDownListFor(m => m.SelectedAvailableRole, new SelectList(Model.AvailableRoles.Select(sr => new SelectListItem() { Text = sr.AvailableRoleId.ToString(), Value = sr.AvailableRoleName + ", " + sr.AvailableRoleDesc }), "Text", "Value", Model.Users.Where(u=> u.Id == Model.SelectedUser) ), "Sélectionnez le  rôle", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.SelectedAvailableRole)
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Créer" />
+            <input type="submit" class="btn btn-default" value="Affecter" />
         </div>
     </div>
 }

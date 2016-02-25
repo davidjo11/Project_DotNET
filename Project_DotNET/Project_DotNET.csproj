@@ -31,7 +31,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG; </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PublishDatabaseSettings>
@@ -41,6 +41,8 @@
         </ObjectGroup>
       </Objects>
     </PublishDatabaseSettings>
+    <IncludeIisSettings>false</IncludeIisSettings>
+    <PublishDatabases>true</PublishDatabases>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -216,9 +218,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Migrations\201602192037145_Approle-AvailableRole.cs" />
-    <Compile Include="Migrations\201602192037145_Approle-AvailableRole.Designer.cs">
-      <DependentUpon>201602192037145_Approle-AvailableRole.cs</DependentUpon>
+    <Compile Include="Migrations\201602241925441_InitialCreate.cs" />
+    <Compile Include="Migrations\201602241925441_InitialCreate.Designer.cs">
+      <DependentUpon>201602241925441_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602242142554_rolescollection.cs" />
+    <Compile Include="Migrations\201602242142554_rolescollection.Designer.cs">
+      <DependentUpon>201602242142554_rolescollection.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\AddAppRoleToUserVMValidator.cs" />
     <Compile Include="Utils\CreateAvailableRoleVMValidator.cs" />
@@ -227,10 +233,6 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201602182148107_InitialCreate.cs" />
-    <Compile Include="Migrations\201602182148107_InitialCreate.Designer.cs">
-      <DependentUpon>201602182148107_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -351,7 +353,7 @@
     <Content Include="Views\Manage\CreateCategory.cshtml" />
     <Content Include="Views\Manage\ListCategories.cshtml" />
     <Content Include="Views\RoleManager\AddAppRoleToUser.cshtml" />
-    <Content Include="Views\RoleManager\CreateAppRole.cshtml" />
+    <Content Include="Views\RoleManager\CreateAvailableRole.cshtml" />
     <Content Include="Views\RoleManager\ListAvailableRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -369,11 +371,11 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602182148107_InitialCreate.resx">
-      <DependentUpon>201602182148107_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602241925441_InitialCreate.resx">
+      <DependentUpon>201602241925441_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201602192037145_Approle-AvailableRole.resx">
-      <DependentUpon>201602192037145_Approle-AvailableRole.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602242142554_rolescollection.resx">
+      <DependentUpon>201602242142554_rolescollection.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

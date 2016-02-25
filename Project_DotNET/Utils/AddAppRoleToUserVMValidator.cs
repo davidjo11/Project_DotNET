@@ -16,13 +16,12 @@ namespace Project_DotNET.Utils
         {
             var db = new ApplicationDbContext();
             RuleFor(x => x.SelectedUser).Must(selectedUser => { return db.Users.Find(selectedUser) != null; }).WithMessage("Sélectionnez un utilisateur.");
-            RuleFor(x => x.SelectedCompany).Must(selectedCompany => { return db.Companies.Find(selectedCompany) != null; }).WithMessage("Sélectionnez une entreprise.");
-            RuleFor(x => x.SelectedJob).Must(selectedJob => { return db.Jobs.Find(selectedJob) != null; }).WithMessage("Sélectionnez le métier exercé durant cette période.");
+            RuleFor(x => x.SelectedAvailableRole).Must(selectedAvailableRole => { return db.AvailableRoles.Find(selectedAvailableRole) != null; }).WithMessage("Sélectionnez le rôle exercé durant cette période.");
             //La date de début ne peut être nulle 
-            RuleFor(x => x.Debut).NotNull().WithMessage("La date de début ne peut être nulle");
-            RuleFor(x => x.Fin).NotNull().WithMessage("La date de fin ne peut être nulle.");
-            RuleFor(x => x.Fin).LessThanOrEqualTo(DateTime.Now).WithMessage("La date de fin ne peut être inférieure à aujourd'hui.");
-            RuleFor(x => x.Debut).LessThan(x => x.Fin).WithMessage("La date de debut doit être inférieure à la date de fin.");
+            //RuleFor(x => x.Debut).NotNull().WithMessage("La date de début ne peut être nulle");
+            //RuleFor(x => x.Fin).NotNull().WithMessage("La date de fin ne peut être nulle.");
+            //RuleFor(x => x.Fin).LessThanOrEqualTo(DateTime.Now).WithMessage("La date de fin ne peut être inférieure à aujourd'hui.");
+            //RuleFor(x => x.Debut).LessThan(x => x.Fin).WithMessage("La date de debut doit être inférieure à la date de fin.");
             //La date de début ne peut être supérieure ou égale à la date de fin (si non nulle) ou courante (aujourd'hui)
             //RuleFor(x => x.debut).LessThanOrEqualTo(DateTime.Now).When(x => x.fin == null).WithMessage("La date de début doit être antérieure à la date d'aujourd'hui.");
             //La période se trouve avant ou après toutes les périodes existantes

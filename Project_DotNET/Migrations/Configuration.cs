@@ -59,9 +59,15 @@ namespace Project_DotNET.Migrations
                 new Models.AvailableRole { AvailableRoleId = 5, AvailableRoleName = "Apprenti", AvailableRoleDesc = "ceci est un apprenti" },
                 new Models.AvailableRole { AvailableRoleId = 6, AvailableRoleName = "Coordinateur", AvailableRoleDesc = "ceci est un coordinateur" },
                 new Models.AvailableRole { AvailableRoleId = 7, AvailableRoleName = "Référent fonctionnel", AvailableRoleDesc = "ceci est un ref fonc" },
-                new Models.AvailableRole { AvailableRoleId = 8, AvailableRoleName = "Référent technique", AvailableRoleDesc = "ceci est un ref tec" }
+                new Models.AvailableRole { AvailableRoleId = 8, AvailableRoleName = "Référent technique", AvailableRoleDesc = "ceci est un ref tec" },
+                new Models.AvailableRole { AvailableRoleId = 9, AvailableRoleName = "Non Défini", AvailableRoleDesc = "Role par défaut." }
                 );
-                
+
+           /* context.Users.AddOrUpdate(
+                u => u.Id,
+                new Models.ApplicationUser { birthday = DateTime.Parse("2/2/1998"), CompanyId = 1, Email = "user@test.com", firstDay = DateTime.Parse("01/01/1999"), firstName = "pName1", JobId = 1, lastName = "lastname1" }
+                );
+                */
                 context.SaveChanges();
         }
     }

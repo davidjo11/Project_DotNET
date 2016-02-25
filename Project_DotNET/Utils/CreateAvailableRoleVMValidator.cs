@@ -21,9 +21,9 @@ namespace Project_DotNET.Utils
             var _db = new ApplicationDbContext();
 
             var nb = _db
-                .AppRoles
+                .AvailableRoles
                 .Select(x => x)
-                .Where(x => x.AppRoleName == name )
+                .Where(x => x.AvailableRoleName == name )
                 .Count();
             return nb == 0 ? true : false;
         }

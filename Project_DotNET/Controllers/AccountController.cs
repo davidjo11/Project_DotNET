@@ -145,6 +145,7 @@ namespace Project_DotNET.Controllers
             {
                 Companies = db.Companies.ToList(),
                 Jobs = db.Jobs.ToList(),
+                AvailableRoles = db.AvailableRoles.ToList()
             };
             /*var jobOptions = db.Jobs.Select(x => new SelectListItem() { Text = x.JobName, Value = x.Id.ToString() });
             var companyOptions = db.Companies.Select(x => new SelectListItem() { Text = x.CompanyName + ", " + x.city + ", " + x.country, Value = x.Id.ToString() });
@@ -173,9 +174,11 @@ namespace Project_DotNET.Controllers
                     birthday = model.birthday,
                     firstName = model.firstName,
                     lastName = model.lastName.ToUpper(),
-                    Pseudo = String.Concat(model.firstName.Substring(0,1), model.lastName).ToLower(),
+                    Pseudo = String.Concat(model.firstName.Substring(0, 1), model.lastName).ToLower(),
                     CompanyId = model.SelectedCompany,
-                    JobId = model.SelectedJob
+                    JobId = model.SelectedJob,
+                    
+
                 };
                 
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -446,7 +449,8 @@ namespace Project_DotNET.Controllers
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Company.CompanyName,  c.firstDay }).ToList();
+                //var data = db.Users.Select(c =>new { Pseudo= c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Company.CompanyName, firstDay=c.firstDay.ToString("dd-MM-yyyy") }).ToList();
+                var data = db.Users.Select(c => new { Pseudo = c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.userRoles, c.Company.CompanyName, firstDay = c.firstDay,  }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

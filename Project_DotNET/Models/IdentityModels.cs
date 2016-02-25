@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -40,8 +41,7 @@ namespace Project_DotNET.Models
 
         public virtual Job Job { get; set; }
 
-        public int AvailableRoleId { get; set; }
-        public virtual AvailableRole AvailableRole { get; set; }
+        public virtual ICollection<AvailableRole> userRoles { get; set; }
 
         public string firstName { get; set; }
 

@@ -36,6 +36,12 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.LabelFor(m => m.SelectedRole, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.SelectedRole, new SelectList(Model.AvailableRoles.Select(r => new SelectListItem() { Text = r.AvailableRoleId.ToString(), Value = r.AvailableRoleName }), "Text", "Value", Model.AvailableRoles.First().AvailableRoleId), "Selectionnez votre rôle", new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
         @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label"})
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(c => new SelectListItem() { Text = c.CompanyId.ToString(), Value = c.CompanyName + ", " + c.city + ", " + c.country}), "Text", "Value",Model.Companies.First().CompanyId), "Selectionnez votre entreprise", new { @class = "form-control" })
