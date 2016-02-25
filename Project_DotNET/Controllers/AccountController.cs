@@ -450,7 +450,7 @@ namespace Project_DotNET.Controllers
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Roles, c.Company.CompanyName, c.firstDay }).ToList();
+                var data = db.Users.Select(c =>new { c.Pseudo, c.firstName, c.lastName, c.Job.JobName, c.Roles, c.Company.CompanyName, firstday= c.firstDay.ToString("yyyy") }).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

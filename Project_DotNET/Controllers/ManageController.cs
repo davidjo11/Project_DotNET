@@ -505,13 +505,18 @@ namespace Project_DotNET.Controllers
         public ActionResult AddJobToUser()
         {
             var db = new ApplicationDbContext();
+            var users = db.Users.ToList();
+            if (users.Count() == 0)
+                return RedirectToAction("List", "Account");
+
             var vm = new AddJobToUserViewModel()
             {
                 Jobs = db.Jobs.ToList(),
-                Users = db.Users.ToList(),
+                Users = users,
                 Companies = db.Companies.ToList(),
                 Roles = db.AvailableRoles.ToList(),
             };
+
             return View(vm);
         }
 
@@ -542,9 +547,13 @@ namespace Project_DotNET.Controllers
 
                 if (roleResult.IsValid)
                 {
+                    db.AppRoles.Add(appRole);
+                    db.SaveChanges();
+                    appRole = db.AppRoles.Select(x => x).Where(x => x == appRole);
+
                     var PeriodsDb = db.Periods;
 
-                    var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser, AppRole = appRole };
+                    var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser, AppRoleId = appRole.AppRoleId };
 
                     PeriodsDb.Add(period);
                     db.SaveChanges();
