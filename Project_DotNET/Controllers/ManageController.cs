@@ -549,7 +549,7 @@ namespace Project_DotNET.Controllers
                 {
                     db.AppRoles.Add(appRole);
                     db.SaveChanges();
-                    appRole = db.AppRoles.Select(x => x).Where(x => x == appRole);
+                    //appRole = db.AppRoles.Select(x => x).Where(x => x == appRole);
 
                     var PeriodsDb = db.Periods;
 
@@ -576,8 +576,40 @@ namespace Project_DotNET.Controllers
             model.Users = db.Users.ToList();
             model.Companies = db.Companies.ToList();
             model.Roles = db.AvailableRoles.ToList();
+            //model.Roles = db.Roles.ToList();
             return View(model);
         }
+
+        [AllowAnonymous]
+        // GET: /Manage/EditPeriod (edit a period)
+        public ActionResult editPeriod()
+        {
+            var userId = Request.QueryString.Get("userId");
+            var periodId = Request.QueryString.Get("periodId");
+            var db = new ApplicationDbContext();
+            var tempUser = db.Users.Find(userId);
+
+            if (tempUser == null)
+                return RedirectToAction("List", "Account");
+
+            var tempA = tempUser.Periods.ToArray()[0];
+            var tempPeriod = tempUser.Periods.ToArray()[int.Parse(periodId) - 1];
+
+
+            var vm = new EditPeriodViewModel()
+            {
+                user = tempUser,
+                period = tempPeriod,
+                Companies = db.Companies.ToList(),
+                AvailableRole = db.AvailableRoles.ToList(),
+                AppRole = tempPeriod !=null? tempPeriod.AppRole:null
+            };
+
+            return View(vm);
+        }
+
+
+
 
         protected override void Dispose(bool disposing)
         {

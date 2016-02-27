@@ -222,9 +222,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201602242152138_Initial.cs" />
-    <Compile Include="Migrations\201602242152138_Initial.Designer.cs">
-      <DependentUpon>201602242152138_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201602271010577_initial.cs" />
+    <Compile Include="Migrations\201602271010577_initial.Designer.cs">
+      <DependentUpon>201602271010577_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -311,6 +311,7 @@
     <Content Include="Views\Manage\CreateRole.cshtml" />
     <Content Include="Views\Account\Details.cshtml" />
     <Content Include="Views\Manage\ListAvailableRoles.cshtml" />
+    <Content Include="Views\Manage\EditPeriod.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -327,8 +328,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602242152138_Initial.resx">
-      <DependentUpon>201602242152138_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602271010577_initial.resx">
+      <DependentUpon>201602271010577_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

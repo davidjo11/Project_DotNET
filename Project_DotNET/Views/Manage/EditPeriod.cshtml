@@ -1,11 +1,12 @@
-﻿@{
-    ViewBag.Title = "Curriculum-vitae";
+﻿@model Project_DotNET.Models.EditPeriodViewModel
+@{
+    ViewBag.Title = "Edition d'une période";
 }
 
 <h2>@ViewBag.Title</h2>
 <div>
     <h4>Informations générales</h4><br />
-    <p>@ViewBag.user.firstName<br />
+    <p>@ViewBag.firstName<br />
     @ViewBag.user.lastName<br />
     @ViewBag.user.birthday.ToString("dd MMM yyyy")<br />
     </p><br />
@@ -24,33 +25,19 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>@ViewBag.user.firstDay.ToString("dd MMM yyyy")</td>
-                <td>En cours</td>
-                <td>@ViewBag.user.Job.JobName</td>
-                <td>@ViewBag.user.Company.CompanyName</td>
-                <td>@ViewBag.user.Company.city</td>
-                <td>En construction</td>
-                <td>En construction</td>
-            </tr>
-            @foreach (var period in ViewBag.user.Periods)
-            {
-                <tr>
-                    <td>@period.debut.ToString("dd MMM yyyy")</td>
-                    <td>@period.fin.ToString("dd MMM yyyy")</td>
-                    <td>@period.Job.JobName</td>
-                    <td>@period.Company.CompanyName</td>
-                    <td>@period.Company.city</td>
+              <tr>
+                    <td>@ViewBag.period.debut.ToString("dd MMM yyyy")</td>
+                    <td>@ViewBag.period.fin.ToString("dd MMM yyyy")</td>
+                    <td>@ViewBag.period.Job.JobName</td>
+                    <td>@ViewBag.period.Company.CompanyName</td>
+                    <td>@ViewBag.period.Company.city</td>
                     <td>
-                        <select name="@period.PeriodId" multiple>
-                            @foreach (var role in @period.AppRole.AppRoles)
+                            @foreach (var role in ViewBag.period.AppRole.AppRoles)
                             {
-                                <option>@role.AvailableRoleName</option>
+                                @role.AvailableRoleName
+                                <button class="btn-primary" onclick="parent.location='/Manage/DeleteRole/ViewBag.period.PeriodId'">Editer</button>
                             }
-                        </select>
-                    </td>
-                    <td>
-                        <button class="btn-primary" onclick="location.href='/Manage/EditPeriod?periodId=@period.PeriodId&userId=@ViewBag.user.Id'">Editer</button>
+                        
                     </td>
                 </tr>
             }
@@ -68,7 +55,7 @@
         $(document).ready(function () {
             $("#list").DataTable();
 
-            $("#list tbody select").click(function () {
+            $("#list tbody button").click(function () {
                 window.location.href = '/Account/AppUser/' + $(this)[0].value;
             });
         })

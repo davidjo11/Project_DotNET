@@ -132,6 +132,41 @@ namespace Project_DotNET.Models
 
     }
 
+    public class EditPeriodViewModel
+    {
+        [Display(Name = "Utilisateur")]
+        public string SelectedUser { get; set; }
+        public ApplicationUser user { get; set; }
+
+        [Display(Name = "Métier exercé")]
+        public int SelectedJob { get; set; }
+        public IEnumerable<Job> Jobs { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Début")]
+        public DateTime Debut { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Fin")]
+        public DateTime Fin { get; set; }
+
+        [Display(Name = "Entreprise")]
+        public int SelectedCompany { get; set; }
+        public IEnumerable<Company> Companies { get; set; }
+
+        [Display(Name = "Nouveau Role")]
+        public int NewRole { get; set; }
+        public IEnumerable<AvailableRole> AvailableRole { get; set; }
+
+        [Display(Name = "Role")]
+        public int appRoleInt { get; set; }
+        public AppRole AppRole { get; set; }
+
+        public Period period { get; set;  }
+
+    }
+
+
     public class CreateCategoryViewModel
     {
         [Display(Name = "Nom de la catégorie")]
