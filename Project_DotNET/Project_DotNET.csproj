@@ -238,6 +238,7 @@
     <Compile Include="Models\PeriodModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\EditPeriodVMValidator.cs" />
     <Compile Include="Utils\AddJobToUserVMValidator.cs" />
     <Compile Include="Utils\CreateRoleVMValidator.cs" />
     <Compile Include="Utils\CreateCategoryVMValidator.cs" />

@@ -598,9 +598,14 @@ namespace Project_DotNET.Controllers
 
             var vm = new EditPeriodViewModel()
             {
+                Title = "Edition d'une période",
                 user = tempUser,
+                birthday = tempUser.birthday,
                 period = tempPeriod,
+                SelectedCompany = tempPeriod.CompanyId,
+                SelectedJob =  tempPeriod.Job.JobId,
                 Companies = db.Companies.ToList(),
+                Jobs = db.Jobs.ToList(),
                 AvailableRole = db.AvailableRoles.ToList(),
                 AppRole = tempPeriod !=null? tempPeriod.AppRole:null
             };
@@ -608,8 +613,65 @@ namespace Project_DotNET.Controllers
             return View(vm);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // GET: /Manage/EditPeriod (edit a period)
+        public ActionResult editPeriod(EditPeriodViewModel model) {
+
+            EditPeriodVMValidator validator = new EditPeriodVMValidator();
+            ValidationResult result = validator.Validate(model);
+
+            /*Les initialisations sont là pour éviter les problèmes d'objets à cause des if ...*/
+
+            AppRole appRole = new AppRole();
+            AppRoleValidator forAppRole = new AppRoleValidator();
+            ValidationResult roleResult = forAppRole.Validate(appRole);
+
+            ///////////////////////////////////////
+            //////////
+            //TODO injection du role dans la periode actuelle.
 
 
+            //Traitement
+            var db = new ApplicationDbContext();
+            if (result.IsValid)
+            {
+                appRole.addRole(db.AvailableRoles.Find(model.NewRole));
+                roleResult = forAppRole.Validate(appRole);
+
+                if (roleResult.IsValid)
+                {
+
+                    var PeriodDb = db.Periods.Find(model.period.PeriodId);
+                    PeriodDb.AppRole.addRole();
+
+                    var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser, AppRoleId = appRole.AppRoleId };
+
+                    PeriodsDb.Add(period);
+                    db.SaveChanges();
+
+                    return RedirectToAction("List", "Account");
+                }
+            }
+
+            foreach (ValidationFailure failer in result.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
+            foreach (ValidationFailure failer in roleResult.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
+
+            //Redirection vers la liste des jobs pour l'utilisateur concerné
+            model.Jobs = db.Jobs.ToList();
+            model.Companies = db.Companies.ToList();
+            model.AvailableRole = db.AvailableRoles.ToList();
+            //model.Roles = db.Roles.ToList();
+            return View(model);
+        }
+           
 
         protected override void Dispose(bool disposing)
         {

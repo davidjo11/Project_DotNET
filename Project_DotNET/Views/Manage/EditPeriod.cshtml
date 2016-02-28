@@ -1,70 +1,95 @@
 ﻿@model Project_DotNET.Models.EditPeriodViewModel
-@{
-    ViewBag.Title = "Edition d'une période";
-}
 
-<h2>@ViewBag.Title</h2>
+<h2>@Model.Title</h2>
 <div>
+
+
+
+    @Html.AntiForgeryToken()
     <h4>Informations générales</h4><br />
-    <p>@ViewBag.firstName<br />
-    @ViewBag.user.lastName<br />
-    @ViewBag.user.birthday.ToString("dd MMM yyyy")<br />
-    </p><br />
+    <p>
+        <div class="row">
+            @Html.LabelFor(m => m.SelectedUser, new { @class = "col-md-2" })
+            @Model.user.lastName @Model.user.firstName
+        </div>
+        <div class="row">
+            @Html.LabelFor(m => m.birthday, new { @class = "col-md-2" })
+            @Model.birthday.ToString("dd MMM yyyy")
+        </div>
+    </p>
+    @using (Html.BeginForm("EditPeriod", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="form-group">
+                @Html.LabelFor(m => m.period.debut, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.period.debut, new { @class = "form-control", @type = "date", @Value = Model.period.debut != null ? Model.period.debut.ToString("yyy MM dd") : @DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd") })
+                </div>
+                @Html.ValidationMessageFor(m => m.period.debut)
+            </div>
 
-    <h4>Expériences précédentes <button onclick="addJob()">Ajouter une expérience au profil</button></h4> <br />
-    <table id="list" class="table table-striped table-hover dt-responsive">
-        <thead>
-            <tr>
-                <td>Début de la période</td>
-                <td>Fin de la période</td>
-                <td>Métier exercé</td>
-                <td>Entreprise</td>
-                <td>Ville</td>
-                <td>Rôle(s) occupé(s)</td>
-                <td>Editer la période</td>
-            </tr>
-        </thead>
-        <tbody>
-              <tr>
-                    <td>@ViewBag.period.debut.ToString("dd MMM yyyy")</td>
-                    <td>@ViewBag.period.fin.ToString("dd MMM yyyy")</td>
-                    <td>@ViewBag.period.Job.JobName</td>
-                    <td>@ViewBag.period.Company.CompanyName</td>
-                    <td>@ViewBag.period.Company.city</td>
-                    <td>
-                            @foreach (var role in ViewBag.period.AppRole.AppRoles)
-                            {
-                                @role.AvailableRoleName
-                                <button class="btn-primary" onclick="parent.location='/Manage/DeleteRole/ViewBag.period.PeriodId'">Editer</button>
-                            }
-                        
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.period.fin, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.period.fin, new { @class = "form-control", @type = "date", @Value = Model.period.fin != null ? Model.period.fin.ToString("yyy MM dd") : @DateTime.Today.ToString("yyyy-MM-dd") })
+                </div>
+                @Html.ValidationMessageFor(m => m.period.fin)
+            </div>
 
-@section css{
-    <link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
-}
+            <div class="form-group">
+                @Html.LabelFor(m => m.SelectedJob, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SelectedJob, new SelectList(Model.Jobs.Select(j => new SelectListItem() { Text = j.JobId.ToString(), Value = j.JobName }), "Text", "Value", Model.Jobs.First().JobId), "Selectionnez votre métier", new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(m => m.SelectedJob)
+            </div>
 
-@section scripts{
-    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#list").DataTable();
+            <div class="form-group">
+                @Html.LabelFor(m => m.SelectedCompany, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SelectedCompany, new SelectList(Model.Companies.Select(c => new SelectListItem() { Text = c.CompanyId.ToString(), Value = c.CompanyName + ", " + c.city + ", " + c.country }),
+                   "Text", "Value", Model.Companies.First().CompanyId), "Selectionnez votre entreprise", new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(m => m.SelectedCompany)
+            </div>
 
-            $("#list tbody button").click(function () {
-                window.location.href = '/Account/AppUser/' + $(this)[0].value;
-            });
-        })
-        function addJob() {
-            window.location.href = '/Manage/AddJobToUser';
-        }
+            <div class="form-group">
+                @Html.LabelFor(m => m.NewRole, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.NewRole, new SelectList(Model.AvailableRole.Select(ar => new SelectListItem() { Value = ar.AvailableRoleName + ", " + ar.AvailableRoleDesc, Text = ar.AvailableRoleId.ToString() })
+                   , "Text", "Value", Model.AvailableRole.First().AvailableRoleId), "Ajouter un nouveau rôle", new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(m => m.SelectedCompany)
+            </div>
 
-        function editPeriod(e) {
-            window.location.href = '/Manage/EditPeriod/'+e.value;
-        }
-    </script>
-}
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Valider" />
+                    <input type="reset" class="btn btn-default" value="Annuler" onclick="history.back();"/>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-4 label-primary">Roles occupés</div>
+            <div class="col-md-4 label-primary">Actions</div>
+        </div>
+
+            @foreach (var role in Model.period.AppRole.AppRoles)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        <span title="@role.AvailableRoleDesc">@role.AvailableRoleName</span>
+                    </div>
+                    <div class="col-md-8">
+                        <button class="btn-primary" onclick="location.href='/Manage/DeleteRole?RoledId=@role.AvailableRoleId&userId=@Model.user.Id'">Supprimer</button>
+                    </div>
+                    </div>
+                    }
+

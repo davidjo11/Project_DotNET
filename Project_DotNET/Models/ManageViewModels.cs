@@ -134,9 +134,15 @@ namespace Project_DotNET.Models
 
     public class EditPeriodViewModel
     {
+        public String Title { get; set; }
+
         [Display(Name = "Utilisateur")]
         public string SelectedUser { get; set; }
         public ApplicationUser user { get; set; }
+
+        [Display(Name = "Date de naissance")]
+        public DateTime birthday { get; set;}
+
 
         [Display(Name = "Métier exercé")]
         public int SelectedJob { get; set; }
