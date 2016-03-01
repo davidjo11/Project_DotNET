@@ -109,11 +109,11 @@ namespace Project_DotNET.Models
         [Display(Name = "Utilisateur")]
         public string SelectedUser { get; set; }
         public IEnumerable<ApplicationUser> Users { get; set; }
-        
+
         [Display(Name = "Métier exercé")]
         public int SelectedJob { get; set; }
         public IEnumerable<Job> Jobs { get; set; }
-        
+
         [Display(Name = "Rôle occupé")]
         public int[] SelectedRoles { get; set; }
         public IEnumerable<AvailableRole> Roles { get; set; }
@@ -121,7 +121,7 @@ namespace Project_DotNET.Models
         [DataType(DataType.Date)]
         [Display(Name = "Début")]
         public DateTime Debut { get; set; }
-        
+
         [DataType(DataType.Date)]
         [Display(Name = "Fin")]
         public DateTime Fin { get; set; }
@@ -130,6 +130,42 @@ namespace Project_DotNET.Models
         public int SelectedCompany { get; set; }
         public IEnumerable<Company> Companies { get; set; }
 
+    }
+
+
+
+    public class DetailsUserViewModel
+    {
+        public string title = "Curriculum-vitae";
+
+        [Display(Name = "Utilisateur")]
+        public string SelectedUser { get; set; }
+        public string fullName { get; set; }
+
+        public ApplicationUser user { get; set; }
+
+        [Display(Name = "Date de naissance")]
+        public DateTime birthday { get; set; }
+
+        [Display(Name = "Messages d'information")]
+        public List<String> messagesInfo { get; set; }
+
+        [Display(Name = "Messages d'erreur")]
+        public List<String> messagesErrors { get; set; }
+    }
+
+    public class ListUsersViewModel
+    {
+        public string title = "Lister les utilisateurs";
+        [Display(Name = "Utilisateur")]
+        public string SelectedUser { get; set; }
+        public IEnumerable<ApplicationUser> Users { get; set; }
+
+        [Display(Name = "Messages d'information")]
+        public List<String> messagesInfo { get; set; }
+
+        [Display(Name = "Messages d'erreur")]
+        public List<String> messagesErrors { get; set; }
     }
 
     public class EditPeriodViewModel
@@ -142,7 +178,7 @@ namespace Project_DotNET.Models
         public string fullName { get; set; }
 
         [Display(Name = "Date de naissance")]
-        public DateTime birthday { get; set;}
+        public DateTime birthday { get; set; }
 
 
         [Display(Name = "Métier exercé")]

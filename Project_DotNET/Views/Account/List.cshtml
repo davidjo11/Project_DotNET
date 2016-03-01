@@ -1,8 +1,35 @@
-﻿@{
-    ViewBag.Title = "Lister les utilisateurs";
+﻿@model Project_DotNET.Models.ListUsersViewModel
+
+<h2>@Model.title.</h2>
+
+@Html.ValidationSummary("", new { @class = "text-danger" })
+
+@if (@Model.messagesInfo != null)
+{
+    @Html.LabelFor(m => m.messagesInfo, new { @class = "col-md-4 text-info" })
+    <div class="row">
+        @foreach (var msg in Model.messagesInfo)
+        {
+            @msg
+            <br />
+        }
+    </div>
 }
 
-<h2>@ViewBag.Title.</h2>
+@if (@Model.messagesErrors != null)
+{
+    @Html.LabelFor(m => m.messagesErrors, new { @class = "col-md-4 text-danger" })
+    <div class="row">
+        @foreach (var msg in Model.messagesErrors)
+        {
+            @msg
+        }
+    </div>
+}
+
+<br />
+
+
 
 <div style="margin:auto">
     <table id="list" class="table table-striped table-hover dt-responsive">
@@ -18,7 +45,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var user in ViewBag.users)
+            @foreach (var user in Model.Users)
             {
                 <tr id="@user.Id">
                     <td>@user.Pseudo</td>
@@ -35,8 +62,8 @@
 </div>
 
 @section css{
-<link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet"/>
-    }
+    <link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
 
 @section scripts{
     <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
@@ -49,7 +76,7 @@
                 if ($(this).hasClass("act_see")) {
                     window.location.href = '/Account/Details/' + a.name;
                 }
-                else if($(this).hasClass("act_del")){
+                else if ($(this).hasClass("act_del")) {
                     if (confirm("Voulez-vous vraiment supprimer cet utilisateur? (Ok pour oui, Annuler pour non)")) {
                         var jqxhr = $.ajax("/Account/Delete/" + a.name)
                               .done(function () {
@@ -63,7 +90,7 @@
                 }
 
             });
-           @* $('#list').DataTable({
+            @* $('#list').DataTable({
                 "ajax": {
                     "url": "/Account/JsonList",
                     "type": "GET",

@@ -692,6 +692,17 @@ namespace Project_DotNET.Controllers
         public ActionResult deletePeriod() {
             var periodId = Request.QueryString.Get("periodId");
             var userId = Request.QueryString.Get("userId");
+
+            var db = new ApplicationDbContext();
+            var user = db.Users.Find(userId);
+            var period = db.Periods.Find(int.Parse(periodId));
+
+            if (period != null) { 
+                db.Periods.Remove(period);
+                db.SaveChanges();
+            }
+
+
             return RedirectToAction("List", "Account");
         }
 

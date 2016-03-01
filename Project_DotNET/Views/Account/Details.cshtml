@@ -1,17 +1,20 @@
-﻿@{
-    ViewBag.Title = "Curriculum-vitae";
-}
+﻿@model Project_DotNET.Models.DetailsUserViewModel
 
-<h2>@ViewBag.Title</h2>
+
+<h2>@Model.title</h2>
 <div>
     <h4>Informations générales</h4><br />
-    <p>
-        @ViewBag.user.firstName<br />
-    @ViewBag.user.lastName<br />
-    @ViewBag.user.birthday.ToString("dd MMM yyyy")<br />
-</p><br />
+    <div class="row">
+        @Html.LabelFor(m => m.SelectedUser, new { @class = "col-md-2" })
+        @Model.fullName
+    </div>
+    <div class="row">
+        @Html.LabelFor(m => m.birthday, new { @class = "col-md-2" })
+        @Model.birthday.ToString("dd MMM yyyy")
+    </div>
+<p/>
 
-<h4>Expériences précédentes <button onclick="addJob()">Ajouter une expérience au profil</button></h4> <br />
+<h4>Expériences précédentes <button class="btn-primary" onclick="addJob()">Ajouter une expérience au profil</button></h4> <br />
 <table id="list" class="table table-striped table-hover dt-responsive">
     <thead>
         <tr>
@@ -26,36 +29,35 @@
     </thead>
     <tbody>
         <tr>
-            <td>@ViewBag.user.firstDay.ToString("dd MMM yyyy")</td>
+            <td>@Model.user.firstDay.ToString("dd MMM yyyy")</td>
             <td>En cours</td>
-            <td>@ViewBag.user.Job.JobName</td>
-            <td>@ViewBag.user.Company.CompanyName</td>
-            <td>@ViewBag.user.Company.city</td>
+            <td>@Model.user.Job.JobName</td>
+            <td>@Model.user.Company.CompanyName</td>
+            <td>@Model.user.Company.city</td>
             <td>En construction</td>
             <td>En construction
-                <!--<button class="btn-primary" onclick="location.href='/Manage/EditPeriod?=&userId=@ViewBag.user.Id'">Editer</button>
+                <!--<button class="btn-primary" onclick="location.href='/Manage/EditPeriod?=&userId=@Model.user.Id'">Editer</button>
                     -->
             </td>
         </tr>
-        @foreach (var period in ViewBag.user.Periods)
-            {
-            <tr>
-                <td>@period.debut.ToString("dd MMM yyyy")</td>
-                <td>@period.fin.ToString("dd MMM yyyy")</td>
-                <td>@period.Job.JobName</td>
-                <td>@period.Company.CompanyName</td>
-                <td>@period.Company.city</td>
+        @foreach (var tperiod in Model.user.Periods){
+                        <tr>
+                <td>@tperiod.debut.ToString("dd MMM yyyy")</td>
+                <td>@tperiod.fin.ToString("dd MMM yyyy")</td>
+                <td>@tperiod.Job.JobName</td>
+                <td>@tperiod.Company.CompanyName</td>
+                <td>@tperiod.Company.city</td>
                 <td>
                     <ul>
-                        @foreach (var role in @period.AppRole.AppRoles)
+                        @foreach (var role in @tperiod.AppRole.AppRoles)
                         {
                             <li>@role.AvailableRoleName</li>
                         }
                     </ul>
                 </td>
                 <td>
-                    <button class="btn-primary" onclick="location.href='/Manage/EditPeriod?periodId=@period.PeriodId&userId=@ViewBag.user.Id'">Editer</button>
-                    <button class="btn-primary" onclick="location.href='/Manage/DeletePeriod?periodId=@period.PeriodId&userId=@ViewBag.user.Id'">Supprimer</button>
+                    <button class="btn-primary" onclick="location.href='/Manage/EditPeriod?periodId=@tperiod.PeriodId&userId=@Model.user.Id'">Editer</button>
+                    <button class="btn-primary" onclick="location.href='/Manage/DeletePeriod?periodId=@tperiod.PeriodId&userId=@Model.user.Id'">Supprimer</button>
                 </td>
             </tr>
         }

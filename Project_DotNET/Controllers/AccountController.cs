@@ -438,9 +438,16 @@ namespace Project_DotNET.Controllers
         [AllowAnonymous]
         public ActionResult List()
         {
+            ListUsersViewModel vm = new ListUsersViewModel();
             var db = new ApplicationDbContext();
-            ViewBag.users = db.Users.ToList();
-            return View();
+            vm.Users = db.Users.ToList();
+            vm.messagesInfo = new List<string>();
+            vm.messagesInfo.Add("Test d'affichage d'infos");
+
+            vm.messagesErrors = new List<string>();
+            vm.messagesErrors.Add("Test d'affichage d'infos erreurs");
+
+            return View(vm);
         }
 
         //
@@ -461,9 +468,24 @@ namespace Project_DotNET.Controllers
             var db = new ApplicationDbContext();
             var user = db.Users.Find(id);
             if (user == null)
-                return RedirectToAction("List","Account");
-            ViewBag.user = user;
-            return View();
+            {
+                ListUsersViewModel vm = new ListUsersViewModel()
+                {
+                    Users = db.Users,
+                    messagesErrors = new List<string> { "Erreur, l'utilisateur n'a pas pu être identifié !" }
+                };
+            return View("list", vm);
+            }
+
+            DetailsUserViewModel vm2 = new DetailsUserViewModel()
+            {
+                birthday = user.birthday,
+                fullName = user.firstName + " " + user.lastName,
+                user = user,
+                SelectedUser = user.Id
+            };
+
+            return View(vm2);
         }
 
         [AllowAnonymous]
