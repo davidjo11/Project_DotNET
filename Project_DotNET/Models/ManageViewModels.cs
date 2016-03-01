@@ -135,10 +135,11 @@ namespace Project_DotNET.Models
     public class EditPeriodViewModel
     {
         public String Title { get; set; }
+        public int periodId { get; set; }
 
         [Display(Name = "Utilisateur")]
         public string SelectedUser { get; set; }
-        public ApplicationUser user { get; set; }
+        public string fullName { get; set; }
 
         [Display(Name = "Date de naissance")]
         public DateTime birthday { get; set;}
@@ -167,9 +168,6 @@ namespace Project_DotNET.Models
         [Display(Name = "Role")]
         public int appRoleInt { get; set; }
         public AppRole AppRole { get; set; }
-
-        public Period period { get; set;  }
-
     }
 
 

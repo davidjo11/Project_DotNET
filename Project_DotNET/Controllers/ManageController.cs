@@ -9,6 +9,7 @@ using Microsoft.Owin.Security;
 using Project_DotNET.Models;
 using FluentValidation.Results;
 using Project_DotNET.Utils;
+using System.Collections.Generic;
 
 namespace Project_DotNET.Controllers
 {
@@ -592,25 +593,32 @@ namespace Project_DotNET.Controllers
             if (tempUser == null)
                 return RedirectToAction("List", "Account");
 
-            var tempA = tempUser.Periods.ToArray()[0];
-            var tempPeriod = tempUser.Periods.ToArray()[int.Parse(periodId) - 1];
+            var tempPeriod = db.Periods.Find(int.Parse(periodId));
+            var vm = createEditPeriodViewModelSetted(tempUser,tempPeriod);
 
+            return View(vm);
+        }
 
+        public EditPeriodViewModel createEditPeriodViewModelSetted(ApplicationUser tempUser, Period tempPeriod) {
+
+            var db = new ApplicationDbContext();
             var vm = new EditPeriodViewModel()
             {
                 Title = "Edition d'une période",
-                user = tempUser,
+                SelectedUser = tempUser.Id,
+                fullName = tempUser.firstName + " " + tempUser.lastName,
                 birthday = tempUser.birthday,
-                period = tempPeriod,
+                Debut = tempPeriod.debut,
+                Fin = tempPeriod.fin,
+                periodId = tempPeriod.PeriodId,
                 SelectedCompany = tempPeriod.CompanyId,
-                SelectedJob =  tempPeriod.Job.JobId,
+                SelectedJob = tempPeriod.Job.JobId,
                 Companies = db.Companies.ToList(),
                 Jobs = db.Jobs.ToList(),
                 AvailableRole = db.AvailableRoles.ToList(),
-                AppRole = tempPeriod !=null? tempPeriod.AppRole:null
+                AppRole = tempPeriod != null ? tempPeriod.AppRole : null
             };
-
-            return View(vm);
+            return vm;
         }
 
         [AllowAnonymous]
@@ -620,38 +628,40 @@ namespace Project_DotNET.Controllers
         public ActionResult editPeriod(EditPeriodViewModel model) {
 
             EditPeriodVMValidator validator = new EditPeriodVMValidator();
-            ValidationResult result = validator.Validate(model);
+            AppRoleValidator forAppRole = new AppRoleValidator();
+            ValidationResult roleResult = null;
+            ApplicationDbContext db = new ApplicationDbContext();
 
             /*Les initialisations sont là pour éviter les problèmes d'objets à cause des if ...*/
-
-            AppRole appRole = new AppRole();
-            AppRoleValidator forAppRole = new AppRoleValidator();
-            ValidationResult roleResult = forAppRole.Validate(appRole);
-
-            ///////////////////////////////////////
-            //////////
-            //TODO injection du role dans la periode actuelle.
-
-
+            ValidationResult result = validator.Validate(model);
+            var PeriodDb = db.Periods.ToArray()[@model.periodId];
+           
             //Traitement
-            var db = new ApplicationDbContext();
             if (result.IsValid)
             {
-                appRole.addRole(db.AvailableRoles.Find(model.NewRole));
-                roleResult = forAppRole.Validate(appRole);
+                PeriodDb.En_Cours = model.Fin.ToShortDateString() == DateTime.Today.ToShortDateString() ? true : false;
+                PeriodDb.debut = model.Debut;
+                PeriodDb.fin = model.Fin;
+                PeriodDb.CompanyId = db.Companies.ToArray()[model.SelectedCompany-1].CompanyId;
+                PeriodDb.JobId = db.Jobs.ToArray()[model.SelectedJob-1].JobId;
 
-                if (roleResult.IsValid)
+                if (model.NewRole != 0)
                 {
-
-                    var PeriodDb = db.Periods.Find(model.period.PeriodId);
-                    PeriodDb.AppRole.addRole();
-
-                    var period = new Period { En_Cours = false, debut = model.Debut, fin = model.Fin, CompanyId = model.SelectedCompany, JobId = model.SelectedJob, UserId = model.SelectedUser, AppRoleId = appRole.AppRoleId };
-
-                    PeriodsDb.Add(period);
+                    AppRole TempAppRole = new AppRole();
+                    TempAppRole.AppRoles = new List<AvailableRole>(PeriodDb.AppRole.AppRoles);
+                    TempAppRole.addRole(db.AvailableRoles.Find(model.NewRole));
+                    roleResult = forAppRole.Validate(TempAppRole);
+                    if (roleResult.IsValid)
+                    {
+                        PeriodDb.AppRole = TempAppRole;
+                        db.SaveChanges();
+                        return RedirectToAction("Details", "Account", new { id = model.SelectedUser });
+                    }
+                }
+                // no role to validate, period is ok, so return to period.
+                else {
                     db.SaveChanges();
-
-                    return RedirectToAction("List", "Account");
+                    return RedirectToAction("Details", "Account", new { id = model.SelectedUser });
                 }
             }
 
@@ -664,14 +674,61 @@ namespace Project_DotNET.Controllers
                 ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
             }
 
-            //Redirection vers la liste des jobs pour l'utilisateur concerné
+            //Redirection vers la liste des periodes pour l'utilisateur concerné
             model.Jobs = db.Jobs.ToList();
             model.Companies = db.Companies.ToList();
             model.AvailableRole = db.AvailableRoles.ToList();
-            //model.Roles = db.Roles.ToList();
+            model.Debut = PeriodDb.debut;
+            model.Fin = PeriodDb.fin;
+            model.AppRole = PeriodDb.AppRole;
+            model.periodId = PeriodDb.PeriodId;
+            
             return View(model);
         }
-           
+
+        [AllowAnonymous]
+        //TODO complete delete 
+        // GET: /Manage/deletePeriod (edit a period)
+        public ActionResult deletePeriod() {
+            var periodId = Request.QueryString.Get("periodId");
+            var userId = Request.QueryString.Get("userId");
+            return RedirectToAction("List", "Account");
+        }
+
+
+
+        [AllowAnonymous]
+        // GET: /Manage/deleteRole (delete role in a period)
+        public ActionResult deleteRole()
+        {
+            var RoleId = Request.QueryString.Get("RoleId");
+            var PeriodId = Request.QueryString.Get("PeriodId");
+            var userId = Request.QueryString.Get("userId");
+
+            var db = new ApplicationDbContext();
+            var user = db.Users.Find(userId);
+            // Get role from index of a select box
+            var Role = db.AvailableRoles.ToArray()[int.Parse(RoleId)-1];
+            // Here we get it directly from index in db
+            var Period = db.Periods.Find(int.Parse(PeriodId));
+
+            EditPeriodViewModel vm = createEditPeriodViewModelSetted(user, Period);
+
+            if (Role == null) {
+                ModelState.AddModelError("Erreur dans le rôle",new Exception("Le rôle renseigné n'existe dèja plus dans la base de donnée.")); }
+            if (Period == null)
+            {
+                ModelState.AddModelError("Erreur dans la periode", new Exception("La période renseignée n'existe plus dans la base de donnée."));
+            }
+
+            if (Role != null && Period != null) { 
+            Period.AppRole.removeRole(Role);
+            db.SaveChanges();
+                return RedirectToAction("Details", "Account",new { id = user.Id });
+            }
+
+            return View(vm);
+        }
 
         protected override void Dispose(bool disposing)
         {

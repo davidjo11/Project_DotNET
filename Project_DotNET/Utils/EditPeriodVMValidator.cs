@@ -22,12 +22,15 @@ namespace Project_DotNET.Utils
             RuleFor(x => x.Fin).NotNull().WithMessage("La date de fin ne peut être nulle.");
             RuleFor(x => x.Fin).LessThanOrEqualTo(DateTime.Now).WithMessage("La date de fin ne peut être inférieure à aujourd'hui.");
             RuleFor(x => x.Debut).LessThan(x => x.Fin).WithMessage("La date de debut doit être inférieure à la date de fin.");
-            RuleFor(x => x.Debut).Must((x, debut) => { return noIntersection(db.Users.Find(x.SelectedUser), x.Debut, x.Fin); }).WithMessage("La période se croise avec une autre période           existante.");
-            RuleFor(x => x.NewRole).Must(NewRole => { return db.AvailableRoles.Find(NewRole) != null; }).WithMessage("Selectionnez un rôle");
+            RuleFor(x => x.Debut).Must((x, debut) => { return noIntersection(db.Users.Find(x.SelectedUser), x.Debut, x.Fin,x.periodId); }).WithMessage("La période se croise avec une autre période           existante.");
+            //RuleFor(x => x.NewRole).Must(NewRole => { return db.AvailableRoles.Find(NewRole) != null; }).WithMessage("Selectionnez un rôle");
         }
 
-        private bool noIntersection(ApplicationUser user, DateTime debut, DateTime fin)
+        private bool noIntersection(ApplicationUser user, DateTime debut, DateTime fin,int periodId)
         {
+            //TODO: do a proper validation
+            return true;
+
             var _db = new ApplicationDbContext();
             var Periods = 0;
 
@@ -43,7 +46,7 @@ namespace Project_DotNET.Utils
             Periods =
                 _db.Periods
                 .Select(x => x)
-                .Where(x => x.User.Id == user.Id && (debut.CompareTo(x.debut) >= 0 && debut.CompareTo(x.fin) <= 0 || fin.CompareTo(x.debut) >= 0 && fin.CompareTo(x.fin) <= 0 || (x.debut.CompareTo(debut) >= 0 && x.debut.CompareTo(x.fin) <= 0 || x.fin.CompareTo(debut) >= 0 && x.fin.CompareTo(fin) <= 0)))
+                .Where(x => x.User.Id == user.Id && (x.PeriodId!= periodId) &&(debut.CompareTo(x.debut) >= 0 && debut.CompareTo(x.fin) <= 0 || fin.CompareTo(x.debut) >= 0 && fin.CompareTo(x.fin) <= 0 || (x.debut.CompareTo(debut) >= 0 && x.debut.CompareTo(x.fin) <= 0 || x.fin.CompareTo(debut) >= 0 && x.fin.CompareTo(fin) <= 0)))
                 .Count();
 
             //Si'il n'y a aucune intersection alors le nb de périodes est au nb de périodes en bases.

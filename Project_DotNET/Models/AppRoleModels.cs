@@ -38,9 +38,10 @@ namespace Project_DotNET.Models
     {
         public AppRoleValidator()
         {
+            RuleFor(x =>x.AppRoles).NotNull().WithMessage("Il n'a pas de rôle a valider.");
             //Vérifie qu'il n'y a pas d'incompatibilités dans la liste des rôles occupés par le User
             RuleFor(x => x.AppRoles)
-                .Must(x => { return containsIncompatibilities(x); })
+                .Must(x => { return !containsIncompatibilities(x); })
                 .WithMessage("Certains rôles sont incompatibles:\n"
                             + "\t- Responsable technique et Référent technique"
                             + "\t- Responsable fonctionnel et Référent fonctionnel"
@@ -50,12 +51,17 @@ namespace Project_DotNET.Models
         private bool containsIncompatibilities(ICollection<AvailableRole> roles)
         {
 
-            var respFct = roles.Select(x => x.AvailableRoleName = "Responsable fonctionnel");
-            var respTech = roles.Select(x => x.AvailableRoleName = "Responsable technique");
-            var refFct = roles.Select(x => x.AvailableRoleName = "Référent fonctionnel");
-            var refTech = roles.Select(x => x.AvailableRoleName = "Référent technique");
+            var respFct = roles.Where(x => x.AvailableRoleName == "Responsable fonctionnel");
+            var respTech = roles.Where(x => x.AvailableRoleName == "Responsable technique");
+            var refFct = roles.Where(x => x.AvailableRoleName == "Référent fonctionnel");
+            var refTech = roles.Where(x => x.AvailableRoleName == "Référent technique");
+            var t1 = respFct.GetEnumerator().Current;
+            var t2 = respTech.GetEnumerator().Current;
+            var t3 = refFct.GetEnumerator().Current;
+            var t4 = refTech.GetEnumerator().Current;
+            var toto = (respFct.GetEnumerator().Current != null && refFct.GetEnumerator().Current != null) || (respTech.GetEnumerator().Current != null && refTech.GetEnumerator().Current != null);
 
-            return (respFct != null && refFct != null) || (respTech != null && refTech != null) ;
+            return (respFct.GetEnumerator().Current != null && refFct.GetEnumerator().Current != null) || (respTech.GetEnumerator().Current != null && refTech.GetEnumerator().Current != null) ;
         }
     }
 }

@@ -5,12 +5,13 @@
 
 
 
-    @Html.AntiForgeryToken()
+
     <h4>Informations générales</h4><br />
     <p>
+
         <div class="row">
             @Html.LabelFor(m => m.SelectedUser, new { @class = "col-md-2" })
-            @Model.user.lastName @Model.user.firstName
+            @Model.fullName
         </div>
         <div class="row">
             @Html.LabelFor(m => m.birthday, new { @class = "col-md-2" })
@@ -19,23 +20,25 @@
     </p>
     @using (Html.BeginForm("EditPeriod", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.SelectedUser)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-group">
             <div class="form-group">
-                @Html.LabelFor(m => m.period.debut, new { @class = "col-md-2 control-label" })
+                @Html.LabelFor(m => m.Debut, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.period.debut, new { @class = "form-control", @type = "date", @Value = Model.period.debut != null ? Model.period.debut.ToString("yyy MM dd") : @DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd") })
+                    @Html.TextBoxFor(m => m.Debut, new { @class = "form-control", @type = "date", @Value = Model.Debut != null ? Model.Debut.ToString("yyy MM dd") : @DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd") })
                 </div>
-                @Html.ValidationMessageFor(m => m.period.debut)
+                @Html.ValidationMessageFor(m => m.Debut)
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.period.fin, new { @class = "col-md-2 control-label" })
+                @Html.LabelFor(m => m.Fin, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.period.fin, new { @class = "form-control", @type = "date", @Value = Model.period.fin != null ? Model.period.fin.ToString("yyy MM dd") : @DateTime.Today.ToString("yyyy-MM-dd") })
+                    @Html.TextBoxFor(m => m.Fin, new { @class = "form-control", @type = "date", @Value = Model.Fin != null ? Model.Fin.ToString("yyy MM dd") : @DateTime.Today.ToString("yyyy-MM-dd") })
                 </div>
-                @Html.ValidationMessageFor(m => m.period.fin)
+                @Html.ValidationMessageFor(m => m.Fin)
             </div>
 
             <div class="form-group">
@@ -69,7 +72,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" class="btn btn-default" value="Valider" />
-                    <input type="reset" class="btn btn-default" value="Annuler" onclick="history.back();"/>
+                    <input type="reset" class="btn btn-default" value="Annuler" onclick="history.back();" />
                 </div>
             </div>
         </div>
@@ -81,15 +84,19 @@
             <div class="col-md-4 label-primary">Actions</div>
         </div>
 
-            @foreach (var role in Model.period.AppRole.AppRoles)
+        @if (@Model.AppRole != null)
+        {
+        foreach (var role in @Model.AppRole.AppRoles)
             {
-                <div class="row">
-                    <div class="col-md-4">
-                        <span title="@role.AvailableRoleDesc">@role.AvailableRoleName</span>
-                    </div>
-                    <div class="col-md-8">
-                        <button class="btn-primary" onclick="location.href='/Manage/DeleteRole?RoledId=@role.AvailableRoleId&userId=@Model.user.Id'">Supprimer</button>
-                    </div>
-                    </div>
-                    }
-
+            <div class="row">
+                <div class="col-md-4">
+                    <span title="@role.AvailableRoleDesc">@role.AvailableRoleName</span>
+                </div>
+                <div class="col-md-8">
+                    <button class="btn-primary" onclick="location.href='/Manage/deleteRole?RoleId=@role.AvailableRoleId&periodId=@Model.periodId&userId=@Model.SelectedUser'">Supprimer</button>
+                </div>
+            </div>
+        }
+        }
+    </div>
+</div>
