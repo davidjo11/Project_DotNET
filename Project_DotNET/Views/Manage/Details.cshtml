@@ -4,6 +4,33 @@
 <h2>@Model.title</h2>
 <div>
     <h4>Informations générales</h4><br />
+
+    @if (@Model.messagesInfo != null)
+    {
+        @Html.LabelFor(m => m.messagesInfo, new { @class = "col-md-4 text-info" })
+        <div class="row">
+            @foreach (var msg in Model.messagesInfo)
+            {
+                @msg
+                <br />
+            }
+        </div>
+    }
+
+    @if (@Model.messagesErrors != null)
+    {
+        @Html.LabelFor(m => m.messagesErrors, new { @class = "col-md-4 text-danger" })
+        <div class="row">
+            @foreach (var msg in Model.messagesErrors)
+            {
+                @msg
+            }
+        </div>
+    }
+
+    <br />
+
+
     <div class="row">
         @Html.LabelFor(m => m.SelectedUser, new { @class = "col-md-2" })
         @Model.fullName

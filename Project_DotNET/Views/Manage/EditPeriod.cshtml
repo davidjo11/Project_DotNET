@@ -2,13 +2,34 @@
 
 <h2>@Model.Title</h2>
 <div>
-
-
-
-
     <h4>Informations générales</h4><br />
-    <p>
+        <!-- handling message for direct access without model in controller-->
+        @if (@Model.messagesInfo != null)
+        {
+            <div class="row">
+                @Html.LabelFor(m => m.messagesInfo, new { @class = "col-md-4 text-info text-left" })
 
+                @foreach (var msg in Model.messagesInfo)
+                {
+                    @msg
+                    <br />
+                }
+            </div>
+        }
+
+        @if (@Model.messagesErrors != null)
+        {
+            <div class="row">
+                @Html.LabelFor(m => m.messagesErrors, new { @class = "col-md-4 text-danger" })
+
+                @foreach (var msg in Model.messagesErrors)
+                {
+                    @msg
+                    <br />
+                }
+            </div>
+        }
+        <br />
         <div class="row">
             @Html.LabelFor(m => m.SelectedUser, new { @class = "col-md-2" })
             @Model.fullName
@@ -22,6 +43,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SelectedUser)
+        @Html.HiddenFor(m => m.periodId)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-group">
@@ -86,17 +108,17 @@
 
         @if (@Model.AppRole != null)
         {
-        foreach (var role in @Model.AppRole.AppRoles)
+            foreach (var role in @Model.AppRole.AppRoles)
             {
-            <div class="row">
-                <div class="col-md-4">
-                    <span title="@role.AvailableRoleDesc">@role.AvailableRoleName</span>
+                <div class="row">
+                    <div class="col-md-4">
+                        <span title="@role.AvailableRoleDesc">@role.AvailableRoleName</span>
+                    </div>
+                    <div class="col-md-8">
+                        <button class="btn-primary" onclick="location.href='/Manage/deleteRole?RoleId=@role.AvailableRoleId&periodId=@Model.periodId&userId=@Model.SelectedUser'">Supprimer</button>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <button class="btn-primary" onclick="location.href='/Manage/deleteRole?RoleId=@role.AvailableRoleId&periodId=@Model.periodId&userId=@Model.SelectedUser'">Supprimer</button>
-                </div>
-            </div>
-        }
+            }
         }
     </div>
 </div>

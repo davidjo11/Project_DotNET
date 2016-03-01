@@ -129,10 +129,7 @@ namespace Project_DotNET.Models
         [Display(Name = "Entreprise")]
         public int SelectedCompany { get; set; }
         public IEnumerable<Company> Companies { get; set; }
-
     }
-
-
 
     public class DetailsUserViewModel
     {
@@ -152,7 +149,7 @@ namespace Project_DotNET.Models
 
         [Display(Name = "Messages d'erreur")]
         public List<String> messagesErrors { get; set; }
-    }
+}
 
     public class ListUsersViewModel
     {
@@ -204,6 +201,12 @@ namespace Project_DotNET.Models
         [Display(Name = "Role")]
         public int appRoleInt { get; set; }
         public AppRole AppRole { get; set; }
+
+        [Display(Name = "Messages d'information")]
+        public List<String> messagesInfo { get; set; }
+
+        [Display(Name = "Messages d'erreur")]
+        public List<String> messagesErrors { get; set; }
     }
 
 

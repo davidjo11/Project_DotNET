@@ -6,8 +6,9 @@
 
 @if (@Model.messagesInfo != null)
 {
-    @Html.LabelFor(m => m.messagesInfo, new { @class = "col-md-4 text-info" })
     <div class="row">
+        @Html.LabelFor(m => m.messagesInfo, new { @class = "col-md-4 text-info" })
+
         @foreach (var msg in Model.messagesInfo)
         {
             @msg
@@ -17,9 +18,9 @@
 }
 
 @if (@Model.messagesErrors != null)
-{
-    @Html.LabelFor(m => m.messagesErrors, new { @class = "col-md-4 text-danger" })
-    <div class="row">
+{<div class="row">
+        @Html.LabelFor(m => m.messagesErrors, new { @class = "col-md-4 text-danger" })
+
         @foreach (var msg in Model.messagesErrors)
         {
             @msg
@@ -74,7 +75,7 @@
             $("#list tbody a").click(function () {
                 var a = $(this)[0];
                 if ($(this).hasClass("act_see")) {
-                    window.location.href = '/Account/Details/' + a.name;
+                    window.location.href = '/Manage/Details/' + a.name;
                 }
                 else if ($(this).hasClass("act_del")) {
                     if (confirm("Voulez-vous vraiment supprimer cet utilisateur? (Ok pour oui, Annuler pour non)")) {
