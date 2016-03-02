@@ -174,7 +174,10 @@ namespace Project_DotNET.Models
         public string SelectedUser { get; set; }
         public string fullName { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Date de naissance")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}",
+               ApplyFormatInEditMode = true)]
         public DateTime birthday { get; set; }
 
 
