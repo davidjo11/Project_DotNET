@@ -38,7 +38,7 @@ namespace Project_DotNET.Models
     {
         public AppRoleValidator()
         {
-            RuleFor(x =>x.AppRoles).NotNull().WithMessage("Il n'a pas de rôle a valider.");
+            RuleFor(x => x.AppRoles).NotNull().WithMessage("Il n'a pas de rôle a valider.");
             //Vérifie qu'il n'y a pas d'incompatibilités dans la liste des rôles occupés par le User
             RuleFor(x => x.AppRoles)
                 .Must(x => { return !containsIncompatibilities(x); })
@@ -46,22 +46,30 @@ namespace Project_DotNET.Models
                             + "\t- Responsable technique et Référent technique"
                             + "\t- Responsable fonctionnel et Référent fonctionnel"
                             + "Ces couples étant incompatibles, vous ne pouvez pas les avoir occupés en mettant temps.");
+
+            //pas de doublon 
+            RuleFor(x => x).Must(x => !isDuplicate(x)).WithMessage("Ce rôle a déja été ajouté.");
+
+        }
+        
+        private bool isDuplicate(AppRole ar)  {
+
+            var duplicate = ar.AppRoles.GroupBy(x => x).Where(group => group.Count() > 1).Select(group => group.Key);
+            return duplicate.Count()>1;
         }
 
         private bool containsIncompatibilities(ICollection<AvailableRole> roles)
         {
 
-            var respFct = roles.Where(x => x.AvailableRoleName == "Responsable fonctionnel");
-            var respTech = roles.Where(x => x.AvailableRoleName == "Responsable technique");
-            var refFct = roles.Where(x => x.AvailableRoleName == "Référent fonctionnel");
-            var refTech = roles.Where(x => x.AvailableRoleName == "Référent technique");
-            var t1 = respFct.GetEnumerator().Current;
-            var t2 = respTech.GetEnumerator().Current;
-            var t3 = refFct.GetEnumerator().Current;
-            var t4 = refTech.GetEnumerator().Current;
-            var toto = (respFct.GetEnumerator().Current != null && refFct.GetEnumerator().Current != null) || (respTech.GetEnumerator().Current != null && refTech.GetEnumerator().Current != null);
+            var respFct = roles.Where(x => x.AvailableRoleName.Equals("Responsable fonctionnel"));
+            var respTech = roles.Where(x => x.AvailableRoleName.Equals("Responsable technique"));
+            var refFct = roles.Where(x => x.AvailableRoleName.Equals("Référent fonctionnel"));
+            var refTech = roles.Where(x => x.AvailableRoleName.Equals("Référent technique"));
 
-            return (respFct.GetEnumerator().Current != null && refFct.GetEnumerator().Current != null) || (respTech.GetEnumerator().Current != null && refTech.GetEnumerator().Current != null) ;
+            if (respFct.Count()>0 && refFct.Count() > 0) { return true; }
+            if (respTech.Count() > 0 && refTech.Count() > 0) { return true; }
+            return false;
+
         }
     }
 }

@@ -664,8 +664,11 @@ namespace Project_DotNET.Controllers
 
 
             /*Les initialisations sont là pour éviter les problèmes d'objets à cause des if ...*/
-            ValidationResult result = validator.Validate(model);
             var PeriodDb = db.Periods.Find(@model.periodId);
+            model.AppRole = PeriodDb.AppRole;
+            model.AvailableRole = db.AvailableRoles;
+            ValidationResult result = validator.Validate(model);
+           
 
             //Traitement
             if (result.IsValid)
@@ -691,6 +694,11 @@ namespace Project_DotNET.Controllers
                         return View("Details", vm);
                         //return RedirectToAction("Details", "Manage", new { id = model.SelectedUser });
                     }
+
+                    foreach (ValidationFailure failer in roleResult.Errors)
+                    {
+                        ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+                    }
                 }
                 // no role to validate, period is ok, so return to period.
                 else {
@@ -706,10 +714,7 @@ namespace Project_DotNET.Controllers
             {
                 ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
             }
-            foreach (ValidationFailure failer in roleResult.Errors)
-            {
-                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
-            }
+          
 
             //Redirection vers la liste des periodes pour l'utilisateur concerné
             model.Jobs = db.Jobs.ToList();

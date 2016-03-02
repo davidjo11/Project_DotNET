@@ -15,15 +15,20 @@ namespace Project_DotNET.Utils
         public EditPeriodVMValidator()
         {
             var db = new ApplicationDbContext();
-            RuleFor(x => x.SelectedCompany).Must(selectedCompany => { return db.Companies.Find(selectedCompany) != null; }).WithMessage("Sélectionnez une entreprise.");
-            RuleFor(x => x.SelectedJob).Must(selectedJob => { return db.Jobs.Find(selectedJob) != null; }).WithMessage("Sélectionnez le métier exercé durant cette période.");
+            RuleFor(x => x.SelectedCompany).Must(selectedCompany => { return db.Companies.Find(selectedCompany-1) != null; }).WithMessage("Sélectionnez une entreprise.");
+            RuleFor(x => x.SelectedJob).Must(selectedJob => { return db.Jobs.Find(selectedJob-1) != null; }).WithMessage("Sélectionnez le métier exercé durant cette période.");
             //La date de début ne peut être nulle 
             RuleFor(x => x.Debut).NotNull().WithMessage("La date de début ne peut être nulle");
             RuleFor(x => x.Fin).NotNull().WithMessage("La date de fin ne peut être nulle.");
             RuleFor(x => x.Fin).LessThanOrEqualTo(DateTime.Now).WithMessage("La date de fin ne peut être inférieure à aujourd'hui.");
             RuleFor(x => x.Debut).LessThan(x => x.Fin).WithMessage("La date de debut doit être inférieure à la date de fin.");
             RuleFor(x => x.Debut).Must((x, debut) => { return noIntersection(db.Users.Find(x.SelectedUser), x.Debut, x.Fin,x.periodId); }).WithMessage("La période se croise avec une autre période           existante.");
-            //RuleFor(x => x.NewRole).Must(NewRole => { return db.AvailableRoles.Find(NewRole) != null; }).WithMessage("Selectionnez un rôle");
+            //pas de doublon 
+            RuleFor(x => x.AppRole.AppRoles).Must((x, ar) => { if (ar.Contains(x.AvailableRole.ToArray()[(x.NewRole - 1)]))
+                { return false; }
+                else { return true; }
+            }).WithMessage("Ce rôle a déja été ajouté.");
+
         }
 
         private bool noIntersection(ApplicationUser user, DateTime debut, DateTime fin,int periodId)

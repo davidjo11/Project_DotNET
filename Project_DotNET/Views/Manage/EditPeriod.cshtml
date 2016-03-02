@@ -44,21 +44,14 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SelectedUser)
         @Html.HiddenFor(m => m.periodId)
+        @Html.HiddenFor(m => m.birthday)
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-group">
             <div class="form-group">
                 @Html.LabelFor(m => m.Debut, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
-                @Html.TextBox("Debut", Model.Debut.ToString("yyyy-MM-dd"),  new
-              {
-                  @class = "form-control datepicker",
-                  @type = "date",
-                 // @data_date_format = System.Globalization.CultureInfo
-                  //        .CurrentUICulture.DateTimeFormat.ShortDatePattern
-              }) 
-                    @*{@Html.JQueryUI().DatepickerFor(model => model.Debut)
-                        }*@
+                @Html.TextBoxFor(m => m.Debut, new { @class = "form-control datepicker", @type = "date", @Value = Model.Debut.ToString("yyyy-MM-dd") })
 
                 </div>
                 @Html.ValidationMessageFor(m => m.Debut)
@@ -112,7 +105,7 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-4 label-primary">Roles occupés</div>
-            <div class="col-md-4 label-primary">Actions</div>
+            <div class="col-md-2 label-primary">Actions</div>
         </div>
 
         @if (@Model.AppRole != null)
@@ -123,7 +116,7 @@
                     <div class="col-md-4">
                         <span title="@role.AvailableRoleDesc">@role.AvailableRoleName</span>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-2">
                         <button class="btn-primary" onclick="location.href='/Manage/deleteRole?RoleId=@role.AvailableRoleId&periodId=@Model.periodId&userId=@Model.SelectedUser'">Supprimer</button>
                     </div>
                 </div>
