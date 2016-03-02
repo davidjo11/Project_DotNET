@@ -32,13 +32,13 @@ namespace Project_DotNET
                         "~/Scripts/jquery-ui-{version}.js",
                         "~/Scripts/jquery-ui.unobtrusive-{version}.js",
                         "~/Scripts/jquery.ui.datepicker.min.js",
-                        "~/Scripts/jquery.ui.datepicker-fr.js",
+                        "~/Scripts/datepicker-fr.js",
                         "~/Scripts/DatePickerReady.js"
                         ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
-        "~/Content/themes/base/jquery-ui.css",
-                        "~/Content/themes/base/jquery-ui.all.css"
+                        "~/Content/themes/base/all.css"
+                        //"~/Content/themes/base/jquery-ui.all.css",
                         //"~/Content/themes/base/jquery.ui.datepicker.css"
                         //"~/Content/themes/base/jquery-ui.css",
                         //"~/Content/themes/base/jquery.ui.core.css",

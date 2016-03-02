@@ -52,7 +52,7 @@
                 <div class="col-md-10">
                 @Html.TextBox("Debut", Model.Debut.ToString("yyyy-MM-dd"),  new
               {
-                  @class = "form-control datefield",
+                  @class = "form-control datepicker",
                   @type = "date",
                  // @data_date_format = System.Globalization.CultureInfo
                   //        .CurrentUICulture.DateTimeFormat.ShortDatePattern
@@ -67,7 +67,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Fin, new { @class = "col-md-2 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.Fin, new { @class = "form-control", @type = "date", @Value = Model.Fin.ToString("yyyy-MM-dd") })
+                    @Html.TextBoxFor(m => m.Fin, new { @class = "form-control datepicker", @type = "date", @Value = Model.Fin.ToString("yyyy-MM-dd") })
                 </div>
                 @Html.ValidationMessageFor(m => m.Fin)
             </div>
@@ -133,5 +133,6 @@
 </div>
 
 @section scripts{
-   
+    @Scripts.Render("~/bundles/modernizr");
+    @Scripts.Render("~/bundles/jqueryui");
 }
