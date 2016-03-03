@@ -46,7 +46,8 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model.Users)
+			@if (Model.Users !=null){
+            foreach (var user in Model.Users)
             {
                 <tr id="@user.Id">
                     <td>@user.Pseudo</td>
@@ -58,6 +59,7 @@
                     <td><a class="act_see" href="#" name="@user.Id">Plus de détails...</a> | <a class="act_del" href="#" name="@user.Id">Supprimer</a></td>
                 </tr>
             }
+			}
         </tbody>
     </table>
 </div>
