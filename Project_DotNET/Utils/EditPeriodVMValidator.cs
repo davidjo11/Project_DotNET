@@ -16,7 +16,7 @@ namespace Project_DotNET.Utils
         {
             var db = new ApplicationDbContext();
             RuleFor(x => x.SelectedCompany).Must(selectedCompany => { return db.Companies.Find(selectedCompany-1) != null; }).WithMessage("Sélectionnez une entreprise.");
-            RuleFor(x => x.SelectedJob).Must(selectedJob => { return db.Jobs.Find(selectedJob-1) != null; }).WithMessage("Sélectionnez le métier exercé durant cette période.");
+            RuleFor(x => x.SelectedJob).Must(selectedJob => { return db.Jobs.ToList()[(selectedJob-1)] != null; }).WithMessage("Sélectionnez le métier exercé durant cette période.");
             //La date de début ne peut être nulle 
             RuleFor(x => x.Debut).NotNull().WithMessage("La date de début ne peut être nulle");
             RuleFor(x => x.Fin).NotNull().WithMessage("La date de fin ne peut être nulle.");
@@ -24,10 +24,15 @@ namespace Project_DotNET.Utils
             RuleFor(x => x.Debut).LessThan(x => x.Fin).WithMessage("La date de debut doit être inférieure à la date de fin.");
             RuleFor(x => x.Debut).Must((x, debut) => { return noIntersection(db.Users.Find(x.SelectedUser), x.Debut, x.Fin,x.periodId); }).WithMessage("La période se croise avec une autre période           existante.");
             //pas de doublon 
-            RuleFor(x => x.AppRole.AppRoles).Must((x, ar) => { if (ar.Contains(x.AvailableRole.ToArray()[(x.NewRole - 1)]))
-                { return false; }
-                else { return true; }
-            }).WithMessage("Ce rôle a déja été ajouté.");
+            When(x => x.NewRole > 0, () =>
+            {
+                RuleFor(x => x.AppRole.AppRoles).Must((x, ar) =>
+                {
+                    if (ar.Contains(x.AvailableRole.ToArray()[(x.NewRole - 1)]))
+                    { return false; }
+                    else { return true; }
+                }).WithMessage("Ce rôle a déja été ajouté.");
+            });
 
         }
 
