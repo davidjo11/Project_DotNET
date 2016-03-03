@@ -440,7 +440,10 @@ namespace Project_DotNET.Controllers
         {
             ListUsersViewModel vm = new ListUsersViewModel();
             var db = new ApplicationDbContext();
-            vm.Users = db.Users.ToList();
+            var users = db.Users;
+
+            vm.Users = db.Users!=null?db.Users.ToList():null;
+
            return View(vm);
         }
 

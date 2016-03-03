@@ -760,7 +760,7 @@ namespace Project_DotNET.Controllers
             if (period != null)
             {
                 db.Periods.Remove(period);
-                // db.SaveChanges();
+                db.SaveChanges();
                 vm.messagesInfo = new List<string>();
                 vm.messagesInfo.Add("La période séléctionnée de l'utilisateur " + user.firstName + " " + user.lastName + " a été supprimée.");
             }
@@ -768,7 +768,11 @@ namespace Project_DotNET.Controllers
                 vm.messagesErrors = new List<string>();
                 vm.messagesErrors.Add("La période demandé de l'utilisateur " + user.firstName + " " + user.lastName + " n' pas été trouvée.");
             }
-            return View("Details","Account", vm);
+            vm.birthday = user.birthday;
+            vm.fullName = user.firstName + " " + user.lastName;
+            vm.user = user;
+            vm.SelectedUser = userId;
+            return View("Details", vm);
         }
 
 
