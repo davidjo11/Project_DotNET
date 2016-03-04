@@ -28,6 +28,7 @@ namespace Project_DotNET.Utils
             {
                 RuleFor(x => x.AppRole.AppRoles).Must((x, ar) =>
                 {
+
                     if (ar.Contains(x.AvailableRole.ToArray()[(x.NewRole - 1)]))
                     { return false; }
                     else { return true; }
@@ -39,7 +40,7 @@ namespace Project_DotNET.Utils
         private bool noIntersection(ApplicationUser user, DateTime debut, DateTime fin,int periodId)
         {
             //TODO: do a proper validation
-            return true;
+            //return true;
 
             var _db = new ApplicationDbContext();
             var Periods = 0;
@@ -53,14 +54,22 @@ namespace Project_DotNET.Utils
             //Périodes qui croisent pas la nouvelle: http://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods
             Periods = 0;
            
-            Periods =
+            var inter =
                 _db.Periods
                 .Select(x => x)
                 .Where(x => x.User.Id == user.Id && (x.PeriodId!= periodId) &&(debut.CompareTo(x.debut) >= 0 && debut.CompareTo(x.fin) <= 0 || fin.CompareTo(x.debut) >= 0 && fin.CompareTo(x.fin) <= 0 || (x.debut.CompareTo(debut) >= 0 && x.debut.CompareTo(x.fin) <= 0 || x.fin.CompareTo(debut) >= 0 && x.fin.CompareTo(fin) <= 0)))
-                .Count();
+                .ToList();
+
+            if(inter.Count() > 1)
 
             //Si'il n'y a aucune intersection alors le nb de périodes est au nb de périodes en bases.
-            return (Periods == 0) ? true : false;
+                return (Periods == 0) ? true : false;
+
+            if(inter.Count() == 1)
+                return inter.First().AppRoleId == periodId;
+
+            //Count == 0 => pas de croisement => correct.
+            return true;
         }
     }
 }
