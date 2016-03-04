@@ -38,6 +38,7 @@ namespace Project_DotNET.Models
     {
         public AppRoleValidator()
         {
+            CascadeMode = CascadeMode.Continue;
             RuleFor(x => x.AppRoles).NotNull().WithMessage("Il n'a pas de rôle a valider.");
             //Vérifie qu'il n'y a pas d'incompatibilités dans la liste des rôles occupés par le User
             RuleFor(x => x.AppRoles)

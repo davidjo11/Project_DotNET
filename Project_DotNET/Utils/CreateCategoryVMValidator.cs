@@ -12,6 +12,7 @@ namespace Project_DotNET.Utils
     {
         public CreateCategoryVMValidator()
         {
+            CascadeMode = CascadeMode.Continue;
             RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name); }).WithMessage("Cette catégorie existe déjà.");
         }
 

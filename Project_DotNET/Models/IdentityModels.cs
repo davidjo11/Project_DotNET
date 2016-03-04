@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 namespace Project_DotNET.Models
 {
     // Vous pouvez ajouter des données de profil pour l'utilisateur en ajoutant plus de propriétés à votre classe ApplicationUser ; consultez http://go.microsoft.com/fwlink/?LinkID=317594 pour en savoir davantage.
-    [Validator(typeof(UserValidator))]
     public class    ApplicationUser : IdentityUser
     {
         public ApplicationUser()
@@ -90,6 +89,7 @@ namespace Project_DotNET.Models
         {
             public UserValidator()
             {
+                CascadeMode = CascadeMode.Continue;
                 RuleFor(x => x.firstName).NotEmpty().WithMessage("Le prénom est requis (2-10 lettres).").Length(2, 10);
                 RuleFor(x => x.lastName).NotEmpty().WithMessage("Le nom est requis (2-10 lettres).").Length(2, 10);
                 //Age adulte requis

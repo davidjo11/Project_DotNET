@@ -12,7 +12,7 @@ namespace Project_DotNET.Utils
     {
         public CreateJobVMValidator()
         {
-            var db = new ApplicationDbContext();
+            CascadeMode = CascadeMode.Continue;
             RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name, x.SelectedCategory); }).WithMessage("Ce nom de métier existe déjà.");
         }
 

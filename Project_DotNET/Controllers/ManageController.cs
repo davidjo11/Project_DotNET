@@ -604,6 +604,8 @@ namespace Project_DotNET.Controllers
             model.Users = db.Users.ToList();
             model.Companies = db.Companies.ToList();
             model.Roles = db.AvailableRoles.ToList();
+            model.Debut = model.Debut;
+            model.Fin = model.Fin;
             //model.Roles = db.Roles.ToList();
             return View(model);
         }

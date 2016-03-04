@@ -14,6 +14,7 @@ namespace Project_DotNET.Utils
     {
         public AddJobToUserVMValidator()
         {
+            CascadeMode = CascadeMode.Continue;
             var db = new ApplicationDbContext();
             RuleFor(x => x.SelectedUser).Must(selectedUser => { return db.Users.Find(selectedUser) != null; }).WithMessage("Sélectionnez un utilisateur.");
             RuleFor(x => x.SelectedCompany).Must(selectedCompany => { return db.Companies.Find(selectedCompany) != null; }).WithMessage("Sélectionnez une entreprise.");

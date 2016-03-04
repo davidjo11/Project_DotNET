@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Project_DotNET.Models;
 using System.Collections.Generic;
+using FluentValidation.Results;
 
 namespace Project_DotNET.Controllers
 {
@@ -162,6 +163,8 @@ namespace Project_DotNET.Controllers
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             var db = new ApplicationDbContext();
+            ApplicationUser.UserValidator userV = new ApplicationUser.UserValidator();
+            ValidationResult result2 = new ValidationResult();
             if (ModelState.IsValid)
             {
                 var CompanyDb = db.Companies;
@@ -178,10 +181,12 @@ namespace Project_DotNET.Controllers
                     firstDay = model.firstDay,
                     JobId = model.SelectedJob,
                 };
-                
+
+                userV = new ApplicationUser.UserValidator();
+                result2 = userV.Validate(user);
 
                 var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (result.Succeeded && result2.IsValid)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
@@ -195,10 +200,15 @@ namespace Project_DotNET.Controllers
                 }
                 AddErrors(result);
             }
-
+            foreach (ValidationFailure failer in result2.Errors)
+            {
+                ModelState.AddModelError(failer.PropertyName, failer.ErrorMessage);
+            }
             // Si nous sommes arrivés là, un échec s’est produit. Réafficher le formulaire
             model.Companies = db.Companies.ToList();
             model.Jobs = db.Jobs.ToList();
+            model.birthday = model.birthday;
+            model.firstDay = model.firstDay;
             return View(model);
         }
 

@@ -12,7 +12,7 @@ namespace Project_DotNET.Utils
     {
         public CreateRoleVMValidator()
         {
-            var db = new ApplicationDbContext();
+            CascadeMode = CascadeMode.Continue;
             RuleFor(x => x.Name).Must((x, name) => { return notExists(x.Name);}).WithMessage("Ce rôle existe déjà.");
         }
 
